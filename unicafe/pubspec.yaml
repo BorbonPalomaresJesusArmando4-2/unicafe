@@ -1,0 +1,34 @@
+name: unicafe
+description: "Aplicación Unicafé - Tu cafetería favorita"
+publish_to: 'none'
+
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.0.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  cupertino_icons: ^1.0.8
+  url_launcher: ^6.1.11
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^5.0.0
+  flutter_native_splash: ^2.4.6  # MOVER AQUÍ desde las dependencias principales
+
+flutter_native_splash:
+  color: "#42a5f5"
+  image: "assets/images/splash.png"
+  android: true
+  ios: true
+  android_12:
+    image: "assets/images/splash.png"
+    icon_background_color: "#FFFFFF"
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/images/
