@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+//cambiado por AngelPro99
+
 // 1. Convertido a StatefulWidget
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -297,7 +299,7 @@ class _HomePageState extends State<HomePage> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  'La Cafe To Go',
+                  'UNICAFE',
                   style: TextStyle(
                     fontSize: 28,
                     fontWeight: FontWeight.bold,
