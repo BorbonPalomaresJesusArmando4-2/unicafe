@@ -1,6 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+// DEFINICIÓN DE COLORES (Misma paleta global)
+const Color kColorPrimary = Color(0xFF3E2723); // Café oscuro
+const Color kColorSecondary = Color(0xFF5D4037); // Café medio
+const Color kColorAccent = Color(0xFFFFAB00); // Ámbar/Dorado
+const Color kColorBackground = Color(0xFFFAFAFA); // Blanco hueso
+const Color kColorText = Color(0xFF3E2723); // Texto oscuro
+
 class ContactanosPage extends StatefulWidget {
   const ContactanosPage({super.key});
 
@@ -40,6 +47,7 @@ class _ContactanosPageState extends State<ContactanosPage> {
       _isLoading = true;
     });
 
+    // Simulación de envío
     await Future.delayed(const Duration(seconds: 2));
 
     if (mounted) {
@@ -55,11 +63,11 @@ class _ContactanosPageState extends State<ContactanosPage> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Row(
+          title: Row(
             children: [
-              Icon(Icons.check_circle, color: Colors.green),
-              SizedBox(width: 8),
-              Text('Mensaje Enviado'),
+              Icon(Icons.check_circle, color: Colors.green[700]),
+              const SizedBox(width: 8),
+              const Text('Mensaje Enviado'),
             ],
           ),
           content: const Text('Tu mensaje ha sido enviado exitosamente. Te contactaremos pronto.'),
@@ -69,7 +77,7 @@ class _ContactanosPageState extends State<ContactanosPage> {
                 Navigator.pop(context);
                 _limpiarFormulario();
               },
-              child: const Text('Aceptar'),
+              child: const Text('Aceptar', style: TextStyle(color: kColorPrimary)),
             ),
           ],
         );
@@ -89,26 +97,18 @@ class _ContactanosPageState extends State<ContactanosPage> {
     if (await canLaunchUrl(url)) {
       await launchUrl(url);
     } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('No se pudo realizar la llamada'),
-          backgroundColor: Colors.red,
-        ),
-      );
+      _mostrarError('No se pudo realizar la llamada');
     }
   }
 
   Future<void> _enviarWhatsApp(String mensaje) async {
+    // Nota: El esquema universal es mejor usarlo sin wa.me para compatibilidad en algunos dispositivos,
+    // pero wa.me suele funcionar bien.
     final Uri url = Uri.parse('https://wa.me/5215512345678?text=${Uri.encodeComponent(mensaje)}');
     if (await canLaunchUrl(url)) {
       await launchUrl(url);
     } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('No se pudo abrir WhatsApp'),
-          backgroundColor: Colors.red,
-        ),
-      );
+      _mostrarError('No se pudo abrir WhatsApp');
     }
   }
 
@@ -116,6 +116,8 @@ class _ContactanosPageState extends State<ContactanosPage> {
     final Uri url = Uri.parse('https://maps.google.com/?q=Unicafé+Ciudad+de+México');
     if (await canLaunchUrl(url)) {
       await launchUrl(url);
+    } else {
+      _mostrarError('No se pudo abrir el mapa');
     }
   }
 
@@ -126,18 +128,23 @@ class _ContactanosPageState extends State<ContactanosPage> {
     if (await canLaunchUrl(url)) {
       await launchUrl(url);
     } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('No se pudo abrir la aplicación de email'),
-          backgroundColor: Colors.red,
-        ),
-      );
+      _mostrarError('No se pudo abrir la aplicación de email');
     }
+  }
+
+  void _mostrarError(String mensaje) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(mensaje),
+        backgroundColor: Colors.red[700],
+      ),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: kColorBackground, // Fondo hueso
       appBar: AppBar(
         title: const Text(
           'Contáctanos',
@@ -146,7 +153,7 @@ class _ContactanosPageState extends State<ContactanosPage> {
             color: Colors.white,
           ),
         ),
-        backgroundColor: Colors.blue[700],
+        backgroundColor: kColorPrimary, // AppBar Café
         foregroundColor: Colors.white,
         elevation: 0,
       ),
@@ -168,6 +175,7 @@ class _ContactanosPageState extends State<ContactanosPage> {
   Widget _buildInfoContacto() {
     return Card(
       elevation: 4,
+      color: Colors.white,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       child: Padding(
         padding: const EdgeInsets.all(20),
@@ -179,7 +187,7 @@ class _ContactanosPageState extends State<ContactanosPage> {
               style: TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
-                color: Colors.blue,
+                color: kColorPrimary, // CAMBIO: Texto café
               ),
             ),
             const SizedBox(height: 16),
@@ -188,7 +196,7 @@ class _ContactanosPageState extends State<ContactanosPage> {
               icon: Icons.phone,
               title: 'Teléfono',
               subtitle: '+52 (55) 1234 5678',
-              color: Colors.green,
+              color: Colors.green[700]!, // Verde un poco más oscuro
               onTap: () => _hacerLlamada('+525512345678'),
             ),
 
@@ -198,7 +206,7 @@ class _ContactanosPageState extends State<ContactanosPage> {
               icon: Icons.chat,
               title: 'WhatsApp',
               subtitle: 'Envíanos un mensaje',
-              color: Colors.green,
+              color: Colors.green[600]!,
               onTap: () => _enviarWhatsApp('Hola, me gustaría obtener información sobre Unicafé'),
             ),
 
@@ -208,7 +216,7 @@ class _ContactanosPageState extends State<ContactanosPage> {
               icon: Icons.email,
               title: 'Email',
               subtitle: 'contacto@unicafe.com',
-              color: Colors.blue,
+              color: kColorPrimary, // CAMBIO: Email en color corporativo (Café)
               onTap: _enviarEmail,
             ),
 
@@ -218,7 +226,7 @@ class _ContactanosPageState extends State<ContactanosPage> {
               icon: Icons.location_on,
               title: 'Ubicación',
               subtitle: 'Av. Principal #123, Ciudad de México',
-              color: Colors.red,
+              color: Colors.red[800]!, // Rojo más elegante
               onTap: _abrirUbicacion,
             ),
           ],
@@ -237,12 +245,13 @@ class _ContactanosPageState extends State<ContactanosPage> {
     return InkWell(
       onTap: onTap,
       borderRadius: BorderRadius.circular(8),
+      splashColor: color.withOpacity(0.2),
       child: Container(
         padding: const EdgeInsets.all(12),
         decoration: BoxDecoration(
-          color: color.withOpacity(0.1),
+          color: color.withOpacity(0.08), // Fondo muy sutil del color del icono
           borderRadius: BorderRadius.circular(8),
-          border: Border.all(color: color.withOpacity(0.3)),
+          border: Border.all(color: color.withOpacity(0.2)),
         ),
         child: Row(
           children: [
@@ -264,6 +273,7 @@ class _ContactanosPageState extends State<ContactanosPage> {
                     style: const TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 14,
+                      color: kColorText,
                     ),
                   ),
                   Text(
@@ -290,6 +300,7 @@ class _ContactanosPageState extends State<ContactanosPage> {
   Widget _buildFormularioContacto() {
     return Card(
       elevation: 4,
+      color: Colors.white,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       child: Padding(
         padding: const EdgeInsets.all(20),
@@ -303,78 +314,56 @@ class _ContactanosPageState extends State<ContactanosPage> {
                 style: TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
-                  color: Colors.blue,
+                  color: kColorPrimary, // CAMBIO: Texto café
                 ),
               ),
               const SizedBox(height: 20),
 
-              TextFormField(
+              _buildTextField(
                 controller: _nombreController,
-                decoration: const InputDecoration(
-                  labelText: 'Nombre Completo',
-                  prefixIcon: Icon(Icons.person),
-                  border: OutlineInputBorder(),
-                ),
+                label: 'Nombre Completo',
+                icon: Icons.person,
                 validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Por favor ingresa tu nombre';
-                  }
+                  if (value == null || value.isEmpty) return 'Por favor ingresa tu nombre';
                   return null;
                 },
               ),
 
               const SizedBox(height: 16),
 
-              TextFormField(
+              _buildTextField(
                 controller: _emailController,
+                label: 'Correo Electrónico',
+                icon: Icons.email,
                 keyboardType: TextInputType.emailAddress,
-                decoration: const InputDecoration(
-                  labelText: 'Correo Electrónico',
-                  prefixIcon: Icon(Icons.email),
-                  border: OutlineInputBorder(),
-                ),
                 validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Por favor ingresa tu correo electrónico';
-                  }
-                  if (!_isValidEmail(value)) {
-                    return 'Ingresa un correo electrónico válido';
-                  }
+                  if (value == null || value.isEmpty) return 'Por favor ingresa tu correo';
+                  if (!_isValidEmail(value)) return 'Ingresa un correo válido';
                   return null;
                 },
               ),
 
               const SizedBox(height: 16),
 
-              TextFormField(
+              _buildTextField(
                 controller: _asuntoController,
-                decoration: const InputDecoration(
-                  labelText: 'Asunto',
-                  prefixIcon: Icon(Icons.subject),
-                  border: OutlineInputBorder(),
-                ),
+                label: 'Asunto',
+                icon: Icons.subject,
                 validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Por favor ingresa el asunto';
-                  }
+                  if (value == null || value.isEmpty) return 'Por favor ingresa el asunto';
                   return null;
                 },
               ),
 
               const SizedBox(height: 16),
 
-              TextFormField(
+              _buildTextField(
                 controller: _mensajeController,
+                label: 'Mensaje',
+                icon: Icons.message, // Icono opcional para mensaje
                 maxLines: 5,
-                decoration: const InputDecoration(
-                  labelText: 'Mensaje',
-                  alignLabelWithHint: true,
-                  border: OutlineInputBorder(),
-                ),
                 validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Por favor ingresa tu mensaje';
-                  }
+                  if (value == null || value.isEmpty) return 'Por favor ingresa tu mensaje';
                   return null;
                 },
               ),
@@ -387,8 +376,11 @@ class _ContactanosPageState extends State<ContactanosPage> {
                 child: ElevatedButton(
                   onPressed: _isLoading ? null : _enviarFormulario,
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.blue[700],
-                    foregroundColor: Colors.white,
+                    backgroundColor: kColorAccent, // CAMBIO: Botón dorado
+                    foregroundColor: kColorPrimary, // Texto café para contraste
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
                   ),
                   child: _isLoading
                       ? const SizedBox(
@@ -396,16 +388,59 @@ class _ContactanosPageState extends State<ContactanosPage> {
                     width: 20,
                     child: CircularProgressIndicator(
                       strokeWidth: 2,
-                      valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                      valueColor: AlwaysStoppedAnimation<Color>(kColorPrimary),
                     ),
                   )
-                      : const Text('Enviar Mensaje'),
+                      : const Text(
+                    'Enviar Mensaje',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16,
+                    ),
+                  ),
                 ),
               ),
             ],
           ),
         ),
       ),
+    );
+  }
+
+  // Método auxiliar para estilizar los inputs uniformemente con el tema café
+  Widget _buildTextField({
+    required TextEditingController controller,
+    required String label,
+    required IconData icon,
+    TextInputType keyboardType = TextInputType.text,
+    int maxLines = 1,
+    String? Function(String?)? validator,
+  }) {
+    return TextFormField(
+      controller: controller,
+      keyboardType: keyboardType,
+      maxLines: maxLines,
+      cursorColor: kColorPrimary, // Cursor color café
+      decoration: InputDecoration(
+        labelText: label,
+        labelStyle: TextStyle(color: Colors.grey[700]),
+        prefixIcon: Icon(icon, color: kColorPrimary), // Icono café
+        alignLabelWithHint: maxLines > 1,
+        border: const OutlineInputBorder(),
+        enabledBorder: OutlineInputBorder(
+          borderSide: BorderSide(color: Colors.grey[400]!),
+          borderRadius: BorderRadius.circular(8),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderSide: const BorderSide(color: kColorPrimary, width: 2), // Borde café al seleccionar
+          borderRadius: BorderRadius.circular(8),
+        ),
+        errorBorder: OutlineInputBorder(
+          borderSide: const BorderSide(color: Colors.red),
+          borderRadius: BorderRadius.circular(8),
+        ),
+      ),
+      validator: validator,
     );
   }
 }

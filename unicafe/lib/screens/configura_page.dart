@@ -1,5 +1,12 @@
 import 'package:flutter/material.dart';
 
+// DEFINICIÓN DE COLORES (Misma paleta global)
+const Color kColorPrimary = Color(0xFF3E2723); // Café oscuro
+const Color kColorSecondary = Color(0xFF5D4037); // Café medio
+const Color kColorAccent = Color(0xFFFFAB00); // Ámbar/Dorado
+const Color kColorBackground = Color(0xFFFAFAFA); // Blanco hueso
+const Color kColorText = Color(0xFF3E2723); // Texto oscuro
+
 class ConfiguraPage extends StatefulWidget {
   const ConfiguraPage({super.key});
 
@@ -37,7 +44,7 @@ class _ConfiguraPageState extends State<ConfiguraPage> {
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
-              child: const Text('Cancelar'),
+              child: const Text('Cancelar', style: TextStyle(color: Colors.grey)),
             ),
             ElevatedButton(
               onPressed: () {
@@ -45,7 +52,7 @@ class _ConfiguraPageState extends State<ConfiguraPage> {
                 _mostrarConfirmacionEliminacion();
               },
               style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.red,
+                backgroundColor: Colors.red[800], // Rojo más oscuro
                 foregroundColor: Colors.white,
               ),
               child: const Text('Eliminar'),
@@ -76,13 +83,17 @@ class _ConfiguraPageState extends State<ConfiguraPage> {
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
-              child: const Text('Cancelar'),
+              child: const Text('Cancelar', style: TextStyle(color: Colors.grey)),
             ),
             ElevatedButton(
               onPressed: () {
                 Navigator.pop(context);
                 _cerrarSesion();
               },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: kColorPrimary, // Botón Café
+                foregroundColor: Colors.white,
+              ),
               child: const Text('Cerrar Sesión'),
             ),
           ],
@@ -98,12 +109,12 @@ class _ConfiguraPageState extends State<ConfiguraPage> {
         backgroundColor: Colors.green,
       ),
     );
-    // Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => LoginPage()));
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: kColorBackground, // Fondo hueso
       appBar: AppBar(
         title: const Text(
           'Configuración',
@@ -112,7 +123,7 @@ class _ConfiguraPageState extends State<ConfiguraPage> {
             color: Colors.white,
           ),
         ),
-        backgroundColor: Colors.blue[700],
+        backgroundColor: kColorPrimary, // AppBar Café
         foregroundColor: Colors.white,
         elevation: 0,
       ),
@@ -125,6 +136,7 @@ class _ConfiguraPageState extends State<ConfiguraPage> {
             _buildSeccion(
               titulo: 'Cuenta',
               icono: Icons.person,
+              color: kColorPrimary,
               children: [
                 _buildItemConfiguracion(
                   icono: Icons.edit,
@@ -165,6 +177,7 @@ class _ConfiguraPageState extends State<ConfiguraPage> {
             _buildSeccion(
               titulo: 'Preferencias',
               icono: Icons.settings,
+              color: kColorPrimary,
               children: [
                 _buildItemConfiguracion(
                   icono: Icons.notifications,
@@ -177,7 +190,8 @@ class _ConfiguraPageState extends State<ConfiguraPage> {
                         _notificacionesActivas = value;
                       });
                     },
-                    activeColor: Colors.blue[700],
+                    activeColor: kColorAccent, // Switch Dorado
+                    activeTrackColor: kColorAccent.withOpacity(0.4),
                   ),
                 ),
                 _buildItemConfiguracion(
@@ -191,7 +205,8 @@ class _ConfiguraPageState extends State<ConfiguraPage> {
                         _modoOscuro = value;
                       });
                     },
-                    activeColor: Colors.blue[700],
+                    activeColor: kColorAccent,
+                    activeTrackColor: kColorAccent.withOpacity(0.4),
                   ),
                 ),
                 _buildItemConfiguracion(
@@ -221,7 +236,8 @@ class _ConfiguraPageState extends State<ConfiguraPage> {
                         _recordarSesion = value;
                       });
                     },
-                    activeColor: Colors.blue[700],
+                    activeColor: kColorAccent,
+                    activeTrackColor: kColorAccent.withOpacity(0.4),
                   ),
                 ),
               ],
@@ -229,10 +245,11 @@ class _ConfiguraPageState extends State<ConfiguraPage> {
 
             const SizedBox(height: 24),
 
-            // Sección de Notificaciones
+            // Sección de Comunicaciones
             _buildSeccion(
               titulo: 'Comunicaciones',
               icono: Icons.email,
+              color: kColorPrimary,
               children: [
                 _buildItemConfiguracion(
                   icono: Icons.mark_email_read,
@@ -245,7 +262,8 @@ class _ConfiguraPageState extends State<ConfiguraPage> {
                         _marketingEmails = value;
                       });
                     },
-                    activeColor: Colors.blue[700],
+                    activeColor: kColorAccent,
+                    activeTrackColor: kColorAccent.withOpacity(0.4),
                   ),
                 ),
                 _buildItemConfiguracion(
@@ -267,6 +285,7 @@ class _ConfiguraPageState extends State<ConfiguraPage> {
             _buildSeccion(
               titulo: 'Soporte',
               icono: Icons.help,
+              color: kColorPrimary,
               children: [
                 _buildItemConfiguracion(
                   icono: Icons.help_center,
@@ -315,20 +334,20 @@ class _ConfiguraPageState extends State<ConfiguraPage> {
             _buildSeccion(
               titulo: 'Acciones de Cuenta',
               icono: Icons.warning,
-              color: Colors.orange,
+              color: Colors.orange[800]!, // Naranja quemado para combinar mejor
               children: [
                 _buildItemConfiguracion(
                   icono: Icons.exit_to_app,
                   titulo: 'Cerrar Sesión',
                   subtitulo: 'Salir de tu cuenta',
-                  color: Colors.blue,
+                  color: kColorPrimary, // Icono café
                   onTap: _mostrarDialogoCerrarSesion,
                 ),
                 _buildItemConfiguracion(
                   icono: Icons.delete_forever,
                   titulo: 'Eliminar Cuenta',
                   subtitulo: 'Eliminar permanentemente tu cuenta',
-                  color: Colors.red,
+                  color: Colors.red[800]!, // Rojo oscuro
                   onTap: _mostrarDialogoEliminarCuenta,
                 ),
               ],
@@ -345,10 +364,11 @@ class _ConfiguraPageState extends State<ConfiguraPage> {
     required String titulo,
     required IconData icono,
     required List<Widget> children,
-    Color color = Colors.blue,
+    Color color = kColorPrimary,
   }) {
     return Card(
       elevation: 2,
+      color: Colors.white,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       child: Padding(
         padding: const EdgeInsets.all(16),
@@ -357,7 +377,7 @@ class _ConfiguraPageState extends State<ConfiguraPage> {
           children: [
             Row(
               children: [
-                Icon(icono, color: color, size: 20),
+                Icon(icono, color: color, size: 24),
                 const SizedBox(width: 8),
                 Text(
                   titulo,
@@ -383,7 +403,7 @@ class _ConfiguraPageState extends State<ConfiguraPage> {
     required String subtitulo,
     Widget? trailing,
     VoidCallback? onTap,
-    Color color = Colors.grey,
+    Color color = kColorSecondary, // Color por defecto para los iconos de items
   }) {
     return Column(
       children: [
@@ -394,6 +414,7 @@ class _ConfiguraPageState extends State<ConfiguraPage> {
             style: const TextStyle(
               fontWeight: FontWeight.w500,
               fontSize: 16,
+              color: kColorText,
             ),
           ),
           subtitle: Text(
@@ -403,11 +424,11 @@ class _ConfiguraPageState extends State<ConfiguraPage> {
               color: Colors.grey[600],
             ),
           ),
-          trailing: trailing ?? const Icon(Icons.arrow_forward_ios, size: 16),
+          trailing: trailing ?? const Icon(Icons.arrow_forward_ios, size: 16, color: Colors.grey),
           onTap: onTap,
           contentPadding: const EdgeInsets.symmetric(horizontal: 0),
         ),
-        const Divider(height: 1),
+        Divider(height: 1, color: Colors.grey[200]),
       ],
     );
   }
@@ -427,7 +448,7 @@ class _ConfiguraPageState extends State<ConfiguraPage> {
                 return ListTile(
                   title: Text(_idiomas[index]),
                   trailing: _idiomaSeleccionado == _idiomas[index]
-                      ? Icon(Icons.check, color: Colors.blue[700])
+                      ? const Icon(Icons.check, color: kColorPrimary) // Check café
                       : null,
                   onTap: () {
                     setState(() {
@@ -462,7 +483,7 @@ class _ConfiguraPageState extends State<ConfiguraPage> {
                 return ListTile(
                   title: Text(_temas[index]),
                   trailing: _temaSeleccionado == _temas[index]
-                      ? Icon(Icons.check, color: Colors.blue[700])
+                      ? const Icon(Icons.check, color: kColorPrimary)
                       : null,
                   onTap: () {
                     setState(() {
@@ -489,7 +510,7 @@ class _ConfiguraPageState extends State<ConfiguraPage> {
         return AlertDialog(
           title: const Row(
             children: [
-              Icon(Icons.coffee, color: Colors.blue),
+              Icon(Icons.coffee, color: kColorPrimary), // Icono café
               SizedBox(width: 8),
               Text('Acerca de Unicafé'),
             ],
@@ -514,7 +535,7 @@ class _ConfiguraPageState extends State<ConfiguraPage> {
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
-              child: const Text('Cerrar'),
+              child: const Text('Cerrar', style: TextStyle(color: kColorPrimary)),
             ),
           ],
         );
