@@ -1,5 +1,12 @@
 import 'package:flutter/material.dart';
 
+// DEFINICIÓN DE COLORES (Misma paleta global)
+const Color kColorPrimary = Color(0xFF3E2723); // Café oscuro
+const Color kColorSecondary = Color(0xFF5D4037); // Café medio
+const Color kColorAccent = Color(0xFFFFAB00); // Ámbar/Dorado
+const Color kColorBackground = Color(0xFFFAFAFA); // Blanco hueso
+const Color kColorText = Color(0xFF3E2723); // Texto oscuro
+
 class HistorialPedidosPage extends StatefulWidget {
   const HistorialPedidosPage({super.key});
 
@@ -183,7 +190,7 @@ class _HistorialPedidosPageState extends State<HistorialPedidosPage> {
     return Container(
       height: MediaQuery.of(context).size.height * 0.9,
       decoration: const BoxDecoration(
-        color: Colors.white,
+        color: kColorBackground, // Fondo hueso
         borderRadius: BorderRadius.only(
           topLeft: Radius.circular(24),
           topRight: Radius.circular(24),
@@ -195,17 +202,24 @@ class _HistorialPedidosPageState extends State<HistorialPedidosPage> {
           Container(
             padding: const EdgeInsets.all(20),
             decoration: BoxDecoration(
-              color: Colors.grey[50],
+              color: Colors.white, // Header blanco para contraste
               borderRadius: const BorderRadius.only(
                 topLeft: Radius.circular(24),
                 topRight: Radius.circular(24),
               ),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.05),
+                  blurRadius: 10,
+                  offset: const Offset(0, 5),
+                )
+              ],
             ),
             child: Row(
               children: [
-                Icon(
+                const Icon(
                   Icons.receipt_long,
-                  color: Colors.blue[700],
+                  color: kColorPrimary, // Icono café
                   size: 28,
                 ),
                 const SizedBox(width: 12),
@@ -218,7 +232,7 @@ class _HistorialPedidosPageState extends State<HistorialPedidosPage> {
                         style: const TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
-                          color: Colors.black87,
+                          color: kColorText,
                         ),
                       ),
                       Text(
@@ -310,20 +324,34 @@ class _HistorialPedidosPageState extends State<HistorialPedidosPage> {
       children: [
         Row(
           children: [
-            Icon(icono, color: Colors.blue[700], size: 20),
+            Icon(icono, color: kColorPrimary, size: 20), // Icono café
             const SizedBox(width: 8),
             Text(
               titulo,
               style: const TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.bold,
-                color: Colors.black87,
+                color: kColorText,
               ),
             ),
           ],
         ),
         const SizedBox(height: 12),
-        child,
+        Container(
+          padding: const EdgeInsets.all(16),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(12),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.grey.withOpacity(0.1),
+                blurRadius: 4,
+                offset: const Offset(0, 2),
+              ),
+            ],
+          ),
+          child: child,
+        ),
       ],
     );
   }
@@ -337,7 +365,7 @@ class _HistorialPedidosPageState extends State<HistorialPedidosPage> {
             width: 4,
             height: 40,
             decoration: BoxDecoration(
-              color: Colors.amber[700],
+              color: kColorAccent, // Barra lateral dorada
               borderRadius: BorderRadius.circular(2),
             ),
           ),
@@ -349,8 +377,8 @@ class _HistorialPedidosPageState extends State<HistorialPedidosPage> {
                 Text(
                   '${item.cantidad}x ${item.nombre}',
                   style: const TextStyle(
-                    fontWeight: FontWeight.w500,
-                    color: Colors.black87,
+                    fontWeight: FontWeight.w600,
+                    color: kColorText,
                   ),
                 ),
                 if (item.personalizaciones.isNotEmpty) ...[
@@ -370,7 +398,7 @@ class _HistorialPedidosPageState extends State<HistorialPedidosPage> {
             '\$${(item.precio * item.cantidad).toStringAsFixed(2)}',
             style: const TextStyle(
               fontWeight: FontWeight.bold,
-              color: Colors.black87,
+              color: kColorText,
             ),
           ),
         ],
@@ -387,15 +415,15 @@ class _HistorialPedidosPageState extends State<HistorialPedidosPage> {
           style: TextStyle(
             fontSize: 18,
             fontWeight: FontWeight.bold,
-            color: Colors.black87,
+            color: kColorText,
           ),
         ),
         Text(
           '\$${total.toStringAsFixed(2)}',
-          style: TextStyle(
+          style: const TextStyle(
             fontSize: 18,
             fontWeight: FontWeight.bold,
-            color: Colors.blue[700],
+            color: kColorPrimary, // Precio en café oscuro
           ),
         ),
       ],
@@ -410,14 +438,15 @@ class _HistorialPedidosPageState extends State<HistorialPedidosPage> {
           titulo,
           style: const TextStyle(
             fontWeight: FontWeight.bold,
-            color: Colors.black87,
+            fontSize: 13,
+            color: kColorText,
           ),
         ),
         const SizedBox(height: 2),
         Text(
           valor,
           style: TextStyle(
-            color: Colors.grey[600],
+            color: Colors.grey[700],
           ),
         ),
       ],
@@ -427,8 +456,6 @@ class _HistorialPedidosPageState extends State<HistorialPedidosPage> {
   Widget _buildAccionesPedido(Pedido pedido) {
     return Column(
       children: [
-        _buildLineaDivisoria(),
-        const SizedBox(height: 16),
         Row(
           children: [
             Expanded(
@@ -437,9 +464,12 @@ class _HistorialPedidosPageState extends State<HistorialPedidosPage> {
                 icon: const Icon(Icons.replay),
                 label: const Text('Repetir Pedido'),
                 style: OutlinedButton.styleFrom(
-                  foregroundColor: Colors.blue[700],
-                  side: BorderSide(color: Colors.blue[700]!),
+                  foregroundColor: kColorPrimary, // Texto café
+                  side: const BorderSide(color: kColorPrimary), // Borde café
                   padding: const EdgeInsets.symmetric(vertical: 12),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
                 ),
               ),
             ),
@@ -450,9 +480,12 @@ class _HistorialPedidosPageState extends State<HistorialPedidosPage> {
                 icon: const Icon(Icons.support_agent),
                 label: const Text('Soporte'),
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.amber[700],
-                  foregroundColor: Colors.white,
+                  backgroundColor: kColorAccent, // Botón dorado
+                  foregroundColor: kColorPrimary, // Texto café
                   padding: const EdgeInsets.symmetric(vertical: 12),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
                 ),
               ),
             ),
@@ -470,7 +503,7 @@ class _HistorialPedidosPageState extends State<HistorialPedidosPage> {
   }
 
   void _repetirPedido(Pedido pedido) {
-    Navigator.pop(context); // Cerrar el bottom sheet
+    Navigator.pop(context);
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Row(
@@ -482,7 +515,7 @@ class _HistorialPedidosPageState extends State<HistorialPedidosPage> {
             ),
           ],
         ),
-        backgroundColor: Colors.green,
+        backgroundColor: Colors.green[700],
         behavior: SnackBarBehavior.floating,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       ),
@@ -490,12 +523,11 @@ class _HistorialPedidosPageState extends State<HistorialPedidosPage> {
   }
 
   void _contactarSoporte(Pedido pedido) {
-    Navigator.pop(context); // Cerrar el bottom sheet
-    // Aquí podrías navegar a la página de contacto
+    Navigator.pop(context);
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text('Contactando soporte para el pedido ${pedido.id}'),
-        backgroundColor: Colors.blue[700],
+        backgroundColor: kColorPrimary,
       ),
     );
   }
@@ -507,7 +539,7 @@ class _HistorialPedidosPageState extends State<HistorialPedidosPage> {
       decoration: BoxDecoration(
         color: config.color.withOpacity(0.1),
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: config.color, width: 1),
+        border: Border.all(color: config.color.withOpacity(0.5), width: 1),
       ),
       child: Text(
         config.texto,
@@ -523,9 +555,11 @@ class _HistorialPedidosPageState extends State<HistorialPedidosPage> {
   EstadoConfig _getConfigEstado(EstadoPedido estado) {
     switch (estado) {
       case EstadoPedido.entregado:
-        return EstadoConfig(Colors.green, 'Entregado');
+      // Verde un poco más oscuro y elegante
+        return EstadoConfig(Colors.green[800]!, 'Entregado');
       case EstadoPedido.cancelado:
-        return EstadoConfig(Colors.red, 'Cancelado');
+      // Rojo oscuro
+        return EstadoConfig(Colors.red[800]!, 'Cancelado');
     }
   }
 
@@ -542,6 +576,7 @@ class _HistorialPedidosPageState extends State<HistorialPedidosPage> {
     final pedidosFiltrados = _getPedidosFiltrados();
 
     return Scaffold(
+      backgroundColor: kColorBackground, // Fondo hueso
       appBar: AppBar(
         title: const Text(
           'Historial de Pedidos',
@@ -550,7 +585,7 @@ class _HistorialPedidosPageState extends State<HistorialPedidosPage> {
             color: Colors.white,
           ),
         ),
-        backgroundColor: Colors.blue[700],
+        backgroundColor: kColorPrimary, // AppBar Café
         foregroundColor: Colors.white,
         elevation: 0,
       ),
@@ -602,10 +637,19 @@ class _HistorialPedidosPageState extends State<HistorialPedidosPage> {
             _filtroActual = filtro;
           });
         },
-        selectedColor: Colors.blue[700],
+        // Cuando está seleccionado: Fondo Café, Texto Blanco
+        selectedColor: kColorPrimary,
         checkmarkColor: Colors.white,
+        backgroundColor: Colors.white,
         labelStyle: TextStyle(
-          color: isSelected ? Colors.white : Colors.black87,
+          color: isSelected ? Colors.white : kColorText,
+          fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+        ),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20),
+          side: isSelected
+              ? const BorderSide(color: Colors.transparent)
+              : const BorderSide(color: Colors.grey, width: 0.5),
         ),
       ),
     );
@@ -616,12 +660,13 @@ class _HistorialPedidosPageState extends State<HistorialPedidosPage> {
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       child: TextField(
         controller: _busquedaController,
+        cursorColor: kColorPrimary, // Cursor café
         decoration: InputDecoration(
           hintText: 'Buscar por ID o producto...',
-          prefixIcon: const Icon(Icons.search),
+          prefixIcon: const Icon(Icons.search, color: Colors.grey),
           suffixIcon: _terminoBusqueda.isNotEmpty
               ? IconButton(
-            icon: const Icon(Icons.clear),
+            icon: const Icon(Icons.clear, color: Colors.grey),
             onPressed: () {
               _busquedaController.clear();
               setState(() {
@@ -635,7 +680,15 @@ class _HistorialPedidosPageState extends State<HistorialPedidosPage> {
             borderSide: BorderSide.none,
           ),
           filled: true,
-          fillColor: Colors.grey[100],
+          fillColor: Colors.white, // Blanco para resaltar sobre el fondo hueso
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(12),
+            borderSide: BorderSide(color: Colors.grey[300]!),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(12),
+            borderSide: const BorderSide(color: kColorPrimary, width: 1.5),
+          ),
         ),
         onChanged: (value) {
           setState(() {
@@ -665,15 +718,15 @@ class _HistorialPedidosPageState extends State<HistorialPedidosPage> {
 
   Widget _buildListaPedidos(List<Pedido> pedidos) {
     if (pedidos.isEmpty) {
-      return const Center(
+      return Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(Icons.history, size: 64, color: Colors.grey),
-            SizedBox(height: 16),
+            Icon(Icons.history, size: 64, color: Colors.grey[400]),
+            const SizedBox(height: 16),
             Text(
               'No se encontraron pedidos',
-              style: TextStyle(fontSize: 16, color: Colors.grey),
+              style: TextStyle(fontSize: 16, color: Colors.grey[600]),
             ),
           ],
         ),
@@ -692,6 +745,7 @@ class _HistorialPedidosPageState extends State<HistorialPedidosPage> {
 
   Widget _buildTarjetaPedido(Pedido pedido) {
     return Card(
+      color: Colors.white,
       margin: const EdgeInsets.only(bottom: 12),
       elevation: 2,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
@@ -711,7 +765,7 @@ class _HistorialPedidosPageState extends State<HistorialPedidosPage> {
                     pedido.id,
                     style: const TextStyle(
                       fontWeight: FontWeight.bold,
-                      color: Colors.black87,
+                      color: kColorText,
                     ),
                   ),
                   _buildEstadoChip(pedido.estado),
@@ -735,7 +789,7 @@ class _HistorialPedidosPageState extends State<HistorialPedidosPage> {
                     style: const TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 16,
-                      color: Colors.black87,
+                      color: kColorPrimary, // Precio en café
                     ),
                   ),
                 ],
@@ -748,11 +802,14 @@ class _HistorialPedidosPageState extends State<HistorialPedidosPage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   for (final item in pedido.items.take(2))
-                    Text(
-                      '${item.cantidad}x ${item.nombre}',
-                      style: TextStyle(
-                        color: Colors.grey[600],
-                        fontSize: 14,
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 4),
+                      child: Text(
+                        '${item.cantidad}x ${item.nombre}',
+                        style: TextStyle(
+                          color: Colors.grey[800],
+                          fontSize: 14,
+                        ),
                       ),
                     ),
                   if (pedido.items.length > 2)

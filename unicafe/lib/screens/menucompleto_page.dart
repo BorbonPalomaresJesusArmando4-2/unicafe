@@ -1,5 +1,12 @@
 import 'package:flutter/material.dart';
 
+// DEFINICIÓN DE COLORES
+const Color kColorPrimary = Color(0xFF3E2723); // Café oscuro
+const Color kColorSecondary = Color(0xFF5D4037); // Café medio
+const Color kColorAccent = Color(0xFFFFAB00); // Ámbar/Dorado
+const Color kColorBackground = Color(0xFFFAFAFA); // Blanco hueso
+const Color kColorText = Color(0xFF3E2723); // Texto oscuro
+
 class MenuCompletoPage extends StatefulWidget {
   const MenuCompletoPage({super.key});
 
@@ -17,28 +24,28 @@ class _MenuCompletoPageState extends State<MenuCompletoPage> {
           nombre: 'Espresso',
           descripcion: 'Café concentrado y aromático',
           precio: 35.00,
-          imagen: 'assets/cafe/espresso.jpg',
+          imagen: 'assets/images/cafe/espresso.jpg',
           disponible: true,
         ),
         Producto(
           nombre: 'Capuchino',
           descripcion: 'Café con leche vaporizada y espuma',
           precio: 45.00,
-          imagen: 'assets/cafe/capuchino.jpg',
+          imagen: 'assets/images/cafe/capuchino.jpg',
           disponible: true,
         ),
         Producto(
           nombre: 'Latte',
           descripcion: 'Suave combinación de café y leche',
           precio: 50.00,
-          imagen: 'assets/cafe/latte.jpg',
+          imagen: 'assets/images/cafe/latte.jpg',
           disponible: true,
         ),
         Producto(
           nombre: 'Mocha',
           descripcion: 'Café con chocolate y leche',
           precio: 55.00,
-          imagen: 'assets/cafe/mocha.jpg',
+          imagen: 'assets/images/cafe/mocha.jpg',
           disponible: false,
         ),
       ],
@@ -51,14 +58,14 @@ class _MenuCompletoPageState extends State<MenuCompletoPage> {
           nombre: 'Frappé',
           descripcion: 'Bebida helada de café batido',
           precio: 60.00,
-          imagen: 'assets/cafe/frappe.jpg',
+          imagen: 'assets/images/cafe/frappe.jpg',
           disponible: true,
         ),
         Producto(
           nombre: 'Iced Latte',
           descripcion: 'Latte helado con hielo',
           precio: 52.00,
-          imagen: 'assets/cafe/iced_latte.jpg',
+          imagen: 'assets/images/cafe/iced-latte.jpg',
           disponible: true,
         ),
       ],
@@ -71,21 +78,21 @@ class _MenuCompletoPageState extends State<MenuCompletoPage> {
           nombre: 'Croissant',
           descripcion: 'Hojaldre francés recién horneado',
           precio: 25.00,
-          imagen: 'assets/reposteria/croissant.jpg',
+          imagen: 'assets/images/reposteria/croissant.jpg',
           disponible: true,
         ),
         Producto(
           nombre: 'Muffin de Arándanos',
           descripcion: 'Esponjoso muffin con arándanos frescos',
           precio: 30.00,
-          imagen: 'assets/reposteria/muffin.jpg',
+          imagen: 'assets/images/reposteria/muffin.jpg',
           disponible: true,
         ),
         Producto(
           nombre: 'Pay de Queso',
           descripcion: 'Delicioso cheesecake estilo New York',
           precio: 45.00,
-          imagen: 'assets/reposteria/cheesecake.jpg',
+          imagen: 'assets/images/reposteria/pay-queso.jpg',
           disponible: true,
         ),
       ],
@@ -98,14 +105,14 @@ class _MenuCompletoPageState extends State<MenuCompletoPage> {
           nombre: 'Club Sandwich',
           descripcion: 'Pollo, tocino, lechuga y tomate',
           precio: 75.00,
-          imagen: 'assets/sandwiches/club.jpg',
+          imagen: 'assets/images/sandwiches/club-sandwich.jpg',
           disponible: true,
         ),
         Producto(
           nombre: 'Panini Caprese',
           descripcion: 'Mozzarella, tomate y albahaca',
           precio: 65.00,
-          imagen: 'assets/sandwiches/panini.jpg',
+          imagen: 'assets/images/sandwiches/panini.jpg',
           disponible: true,
         ),
       ],
@@ -147,7 +154,7 @@ class _MenuCompletoPageState extends State<MenuCompletoPage> {
     return Container(
       height: MediaQuery.of(context).size.height * 0.85,
       decoration: const BoxDecoration(
-        color: Colors.white,
+        color: kColorBackground,
         borderRadius: BorderRadius.only(
           topLeft: Radius.circular(24),
           topRight: Radius.circular(24),
@@ -155,49 +162,82 @@ class _MenuCompletoPageState extends State<MenuCompletoPage> {
       ),
       child: Column(
         children: [
-          // Header con imagen
-          Container(
-            height: 200,
-            width: double.infinity,
-            decoration: BoxDecoration(
-              borderRadius: const BorderRadius.only(
-                topLeft: Radius.circular(24),
-                topRight: Radius.circular(24),
+          // Header con imagen (PROTEGIDO CONTRA ERRORES)
+          Stack(
+            children: [
+              SizedBox(
+                height: 250,
+                width: double.infinity,
+                child: ClipRRect(
+                  borderRadius: const BorderRadius.only(
+                    topLeft: Radius.circular(24),
+                    topRight: Radius.circular(24),
+                  ),
+                  child: Image.asset(
+                    producto.imagen,
+                    fit: BoxFit.cover,
+                    errorBuilder: (context, error, stackTrace) {
+                      // Si falla la imagen, muestra esto:
+                      return Container(
+                        color: Colors.grey[300],
+                        child: const Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(Icons.image_not_supported, size: 50, color: Colors.grey),
+                            Text("Imagen no disponible", style: TextStyle(color: Colors.grey)),
+                          ],
+                        ),
+                      );
+                    },
+                  ),
+                ),
               ),
-              image: DecorationImage(
-                image: NetworkImage(producto.imagen),
-                fit: BoxFit.cover,
+              // Botón de cerrar
+              Positioned(
+                top: 16,
+                left: 16,
+                child: CircleAvatar(
+                  backgroundColor: Colors.black45,
+                  child: IconButton(
+                    icon: const Icon(Icons.close, color: Colors.white),
+                    onPressed: () => Navigator.pop(context),
+                  ),
+                ),
               ),
-            ),
-            child: Stack(
-              children: [
-                Positioned(
-                  top: 16,
-                  right: 16,
-                  child: Container(
-                    padding: const EdgeInsets.all(8),
-                    decoration: BoxDecoration(
-                      color: Colors.black54,
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    child: Text(
-                      '\$${producto.precio.toStringAsFixed(2)}',
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 18,
+              // Precio flotante
+              Positioned(
+                bottom: 16,
+                right: 16,
+                child: Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  decoration: BoxDecoration(
+                    color: kColorPrimary.withOpacity(0.9),
+                    borderRadius: BorderRadius.circular(20),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.2),
+                        blurRadius: 6,
+                        offset: const Offset(0, 3),
                       ),
+                    ],
+                  ),
+                  child: Text(
+                    '\$${producto.precio.toStringAsFixed(2)}',
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20,
                     ),
                   ),
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
 
           // Contenido
           Expanded(
             child: Padding(
-              padding: const EdgeInsets.all(20),
+              padding: const EdgeInsets.all(24),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -207,9 +247,9 @@ class _MenuCompletoPageState extends State<MenuCompletoPage> {
                         child: Text(
                           producto.nombre,
                           style: const TextStyle(
-                            fontSize: 24,
+                            fontSize: 26,
                             fontWeight: FontWeight.bold,
-                            color: Colors.black87,
+                            color: kColorText,
                           ),
                         ),
                       ),
@@ -217,34 +257,34 @@ class _MenuCompletoPageState extends State<MenuCompletoPage> {
                     ],
                   ),
 
-                  const SizedBox(height: 12),
+                  const SizedBox(height: 16),
 
                   Text(
                     producto.descripcion,
                     style: TextStyle(
                       fontSize: 16,
-                      color: Colors.grey[600],
-                      height: 1.4,
+                      color: Colors.grey[700],
+                      height: 1.5,
                     ),
                   ),
 
                   const SizedBox(height: 24),
 
-                  // Ingredientes (simulado)
+                  // Ingredientes
                   const Text(
                     'Ingredientes:',
                     style: TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
-                      color: Colors.black87,
+                      color: kColorText,
                     ),
                   ),
 
-                  const SizedBox(height: 8),
+                  const SizedBox(height: 12),
 
                   Wrap(
                     spacing: 8,
-                    runSpacing: 4,
+                    runSpacing: 8,
                     children: [
                       _buildIngredienteChip('Café Premium'),
                       _buildIngredienteChip('Leche Entera'),
@@ -268,20 +308,22 @@ class _MenuCompletoPageState extends State<MenuCompletoPage> {
                       }
                           : null,
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.amber[700],
-                        foregroundColor: Colors.white,
+                        backgroundColor: kColorAccent,
+                        foregroundColor: kColorPrimary,
+                        disabledBackgroundColor: Colors.grey[300],
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(16),
                         ),
-                        elevation: 2,
+                        elevation: 4,
                       ),
                       child: Text(
                         producto.disponible
-                            ? 'Agregar al Carrito - \$${producto.precio.toStringAsFixed(2)}'
-                            : 'No Disponible',
+                            ? 'AGREGAR AL CARRITO'
+                            : 'NO DISPONIBLE',
                         style: const TextStyle(
-                          fontSize: 18,
+                          fontSize: 16,
                           fontWeight: FontWeight.bold,
+                          letterSpacing: 1,
                         ),
                       ),
                     ),
@@ -299,9 +341,11 @@ class _MenuCompletoPageState extends State<MenuCompletoPage> {
     return Chip(
       label: Text(
         ingrediente,
-        style: const TextStyle(fontSize: 12),
+        style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w500),
       ),
-      backgroundColor: Colors.amber[50],
+      backgroundColor: Colors.white,
+      side: BorderSide(color: kColorAccent.withOpacity(0.5)),
+      elevation: 0,
       visualDensity: VisualDensity.compact,
     );
   }
@@ -312,13 +356,20 @@ class _MenuCompletoPageState extends State<MenuCompletoPage> {
         content: Row(
           children: [
             const Icon(Icons.check_circle, color: Colors.white),
-            const SizedBox(width: 8),
+            const SizedBox(width: 12),
             Expanded(
-              child: Text('${producto.nombre} agregado al carrito'),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const Text('¡Agregado al carrito!', style: TextStyle(fontWeight: FontWeight.bold)),
+                  Text('${producto.nombre} se añadió correctamente'),
+                ],
+              ),
             ),
           ],
         ),
-        backgroundColor: Colors.green,
+        backgroundColor: Colors.green[800],
         behavior: SnackBarBehavior.floating,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       ),
@@ -330,19 +381,30 @@ class _MenuCompletoPageState extends State<MenuCompletoPage> {
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
       decoration: BoxDecoration(
         color: disponible ? Colors.green[50] : Colors.red[50],
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(20),
         border: Border.all(
-          color: disponible ? Colors.green : Colors.red,
+          color: disponible ? Colors.green[700]! : Colors.red[700]!,
           width: 1,
         ),
       ),
-      child: Text(
-        disponible ? 'Disponible' : 'Agotado',
-        style: TextStyle(
-          color: disponible ? Colors.green : Colors.red,
-          fontWeight: FontWeight.bold,
-          fontSize: 12,
-        ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(
+            disponible ? Icons.check_circle : Icons.cancel,
+            size: 14,
+            color: disponible ? Colors.green[700] : Colors.red[700],
+          ),
+          const SizedBox(width: 4),
+          Text(
+            disponible ? 'Disponible' : 'Agotado',
+            style: TextStyle(
+              color: disponible ? Colors.green[700] : Colors.red[700],
+              fontWeight: FontWeight.bold,
+              fontSize: 12,
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -350,6 +412,7 @@ class _MenuCompletoPageState extends State<MenuCompletoPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: kColorBackground,
       appBar: AppBar(
         title: const Text(
           'Menú Unicafé',
@@ -358,19 +421,14 @@ class _MenuCompletoPageState extends State<MenuCompletoPage> {
             color: Colors.white,
           ),
         ),
-        backgroundColor: Colors.blue[700],
+        backgroundColor: kColorPrimary,
         foregroundColor: Colors.white,
         elevation: 0,
       ),
       body: Column(
         children: [
-          // Barra de búsqueda
           _buildBarraBusqueda(),
-
-          // Categorías
           _buildCategorias(),
-
-          // Lista de productos
           Expanded(
             child: _buildListaProductos(),
           ),
@@ -384,12 +442,13 @@ class _MenuCompletoPageState extends State<MenuCompletoPage> {
       padding: const EdgeInsets.all(16),
       child: TextField(
         controller: _busquedaController,
+        cursorColor: kColorPrimary,
         decoration: InputDecoration(
           hintText: 'Buscar en el menú...',
-          prefixIcon: const Icon(Icons.search),
+          prefixIcon: const Icon(Icons.search, color: kColorPrimary),
           suffixIcon: _terminoBusqueda.isNotEmpty
               ? IconButton(
-            icon: const Icon(Icons.clear),
+            icon: const Icon(Icons.clear, color: Colors.grey),
             onPressed: () {
               _busquedaController.clear();
               setState(() {
@@ -398,12 +457,17 @@ class _MenuCompletoPageState extends State<MenuCompletoPage> {
             },
           )
               : null,
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(12),
-            borderSide: BorderSide.none,
-          ),
+          border: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: BorderSide.none),
           filled: true,
-          fillColor: Colors.grey[100],
+          fillColor: Colors.white,
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(12),
+            borderSide: BorderSide(color: Colors.grey[300]!),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(12),
+            borderSide: const BorderSide(color: kColorPrimary, width: 1.5),
+          ),
         ),
         onChanged: (value) {
           setState(() {
@@ -416,10 +480,10 @@ class _MenuCompletoPageState extends State<MenuCompletoPage> {
 
   Widget _buildCategorias() {
     return SizedBox(
-      height: 80,
+      height: 90,
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
-        padding: const EdgeInsets.symmetric(horizontal: 16),
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         itemCount: _categorias.length,
         itemBuilder: (context, index) {
           final categoria = _categorias[index];
@@ -434,29 +498,34 @@ class _MenuCompletoPageState extends State<MenuCompletoPage> {
                 });
               },
               borderRadius: BorderRadius.circular(16),
-              child: Container(
+              child: AnimatedContainer(
+                duration: const Duration(milliseconds: 300),
                 padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
                 decoration: BoxDecoration(
-                  color: isSelected ? Colors.blue[700] : Colors.grey[100],
+                  color: isSelected ? kColorPrimary : Colors.white,
                   borderRadius: BorderRadius.circular(16),
                   border: Border.all(
-                    color: isSelected ? Colors.blue[700]! : Colors.grey[300]!,
+                    color: isSelected ? kColorPrimary : Colors.grey[300]!,
+                    width: 1.5,
                   ),
+                  boxShadow: isSelected
+                      ? [BoxShadow(color: kColorPrimary.withOpacity(0.3), blurRadius: 8, offset: const Offset(0, 4))]
+                      : [],
                 ),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Icon(
                       categoria.icono,
-                      color: isSelected ? Colors.white : Colors.blue[700],
-                      size: 20,
+                      color: isSelected ? kColorAccent : kColorPrimary,
+                      size: 24,
                     ),
                     const SizedBox(height: 4),
                     Text(
                       categoria.nombre,
                       style: TextStyle(
-                        color: isSelected ? Colors.white : Colors.black87,
-                        fontWeight: FontWeight.w500,
+                        color: isSelected ? Colors.white : kColorText,
+                        fontWeight: isSelected ? FontWeight.bold : FontWeight.w500,
                         fontSize: 12,
                       ),
                     ),
@@ -474,15 +543,15 @@ class _MenuCompletoPageState extends State<MenuCompletoPage> {
     final productos = _getProductosFiltrados();
 
     if (productos.isEmpty) {
-      return const Center(
+      return Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(Icons.search_off, size: 64, color: Colors.grey),
-            SizedBox(height: 16),
+            Icon(Icons.search_off, size: 64, color: Colors.grey[400]),
+            const SizedBox(height: 16),
             Text(
               'No se encontraron productos',
-              style: TextStyle(fontSize: 16, color: Colors.grey),
+              style: TextStyle(fontSize: 16, color: Colors.grey[600]),
             ),
           ],
         ),
@@ -501,25 +570,40 @@ class _MenuCompletoPageState extends State<MenuCompletoPage> {
 
   Widget _buildItemProducto(Producto producto) {
     return Card(
-      margin: const EdgeInsets.only(bottom: 12),
+      margin: const EdgeInsets.only(bottom: 16),
       elevation: 2,
+      color: Colors.white,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       child: InkWell(
         onTap: () => _mostrarDetallesProducto(producto),
         borderRadius: BorderRadius.circular(16),
         child: Padding(
-          padding: const EdgeInsets.all(16),
+          padding: const EdgeInsets.all(12),
           child: Row(
             children: [
-              // Imagen del producto
+              // Imagen del producto (PROTEGIDO CONTRA ERRORES)
               Container(
-                width: 80,
-                height: 80,
+                width: 90,
+                height: 90,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(12),
-                  image: DecorationImage(
-                    image: NetworkImage(producto.imagen),
+                  color: Colors.grey[200],
+                ),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(12),
+                  child: Image.asset(
+                    producto.imagen,
                     fit: BoxFit.cover,
+                    errorBuilder: (context, error, stackTrace) {
+                      // Icono de respaldo si falla la imagen
+                      return Center(
+                        child: Icon(
+                          Icons.coffee, // Icono de café
+                          color: kColorPrimary.withOpacity(0.5),
+                          size: 40,
+                        ),
+                      );
+                    },
                   ),
                 ),
               ),
@@ -532,6 +616,8 @@ class _MenuCompletoPageState extends State<MenuCompletoPage> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Expanded(
                           child: Text(
@@ -539,16 +625,16 @@ class _MenuCompletoPageState extends State<MenuCompletoPage> {
                             style: const TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.bold,
-                              color: Colors.black87,
+                              color: kColorText,
                             ),
                           ),
                         ),
                         Text(
                           '\$${producto.precio.toStringAsFixed(2)}',
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.bold,
-                            color: Colors.blue[700],
+                            color: kColorPrimary,
                           ),
                         ),
                       ],
@@ -559,14 +645,14 @@ class _MenuCompletoPageState extends State<MenuCompletoPage> {
                     Text(
                       producto.descripcion,
                       style: TextStyle(
-                        fontSize: 14,
+                        fontSize: 13,
                         color: Colors.grey[600],
                       ),
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                     ),
 
-                    const SizedBox(height: 8),
+                    const SizedBox(height: 12),
 
                     _buildDisponibilidadBadge(producto.disponible),
                   ],
@@ -591,7 +677,6 @@ class CategoriaMenu {
     required this.productos,
   });
 }
-
 
 class Producto {
   final String nombre;

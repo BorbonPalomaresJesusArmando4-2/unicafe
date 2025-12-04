@@ -1,5 +1,12 @@
 import 'package:flutter/material.dart';
 
+// DEFINICIÓN DE COLORES (Misma paleta global)
+const Color kColorPrimary = Color(0xFF3E2723); // Café oscuro
+const Color kColorSecondary = Color(0xFF5D4037); // Café medio
+const Color kColorAccent = Color(0xFFFFAB00); // Ámbar/Dorado
+const Color kColorBackground = Color(0xFFFAFAFA); // Blanco hueso
+const Color kColorText = Color(0xFF3E2723); // Texto oscuro
+
 class MiPerfilPage extends StatefulWidget {
   const MiPerfilPage({super.key});
 
@@ -14,7 +21,7 @@ class _MiPerfilPageState extends State<MiPerfilPage> {
   final TextEditingController _direccionController = TextEditingController();
 
   Usuario _usuario = Usuario(
-    nombre: 'Admin',  // Solo "Admin"
+    nombre: 'Admin',
     email: 'Admin@gmail.com',
     telefono: '+52 55 1234 5678',
     direccion: 'Av. Reforma #123, Col. Centro, CDMX',
@@ -51,6 +58,7 @@ class _MiPerfilPageState extends State<MiPerfilPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: kColorBackground, // Fondo hueso
       appBar: AppBar(
         title: const Text(
           'Mi Perfil',
@@ -59,7 +67,7 @@ class _MiPerfilPageState extends State<MiPerfilPage> {
             color: Colors.white,
           ),
         ),
-        backgroundColor: Colors.blue[700],
+        backgroundColor: kColorPrimary, // AppBar Café
         foregroundColor: Colors.white,
         elevation: 0,
       ),
@@ -100,28 +108,35 @@ class _MiPerfilPageState extends State<MiPerfilPage> {
   Widget _buildHeaderPerfil() {
     return Card(
       elevation: 4,
+      color: Colors.white,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
       child: Padding(
         padding: const EdgeInsets.all(20),
         child: Column(
           children: [
             // Avatar y nombre
-            CircleAvatar(
-              radius: 50,
-              backgroundColor: Colors.blue[100],
-              backgroundImage: const NetworkImage(
-                'https://images.unsplash.com/photo-1494790108755-2616b612b786?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=100&q=80',
+            Container(
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                border: Border.all(color: kColorAccent, width: 3), // Borde dorado
+              ),
+              child: const CircleAvatar(
+                radius: 50,
+                backgroundColor: Colors.grey,
+                backgroundImage: NetworkImage(
+                  'https://images.unsplash.com/photo-1494790108755-2616b612b786?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=100&q=80',
+                ),
               ),
             ),
 
             const SizedBox(height: 16),
 
             Text(
-              _usuario.nombre,  // Mostrará "Admin"
+              _usuario.nombre,
               style: const TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
-                color: Colors.black87,
+                color: kColorText,
               ),
             ),
 
@@ -141,20 +156,20 @@ class _MiPerfilPageState extends State<MiPerfilPage> {
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
               decoration: BoxDecoration(
-                color: Colors.amber[50],
+                color: kColorAccent.withOpacity(0.1), // Fondo dorado suave
                 borderRadius: BorderRadius.circular(20),
-                border: Border.all(color: Colors.amber!),
+                border: Border.all(color: kColorAccent),
               ),
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Icon(Icons.local_cafe, size: 16, color: Colors.blue[700]),
+                  const Icon(Icons.local_cafe, size: 16, color: kColorPrimary),
                   const SizedBox(width: 6),
                   Text(
                     'Miembro desde ${_formatearFecha(_usuario.fechaRegistro)}',
-                    style: TextStyle(
-                      color: Colors.blue[700],
-                      fontWeight: FontWeight.w500,
+                    style: const TextStyle(
+                      color: kColorPrimary, // Texto café
+                      fontWeight: FontWeight.bold,
                     ),
                   ),
                 ],
@@ -169,6 +184,7 @@ class _MiPerfilPageState extends State<MiPerfilPage> {
   Widget _buildSeccionInformacionPersonal() {
     return Card(
       elevation: 4,
+      color: Colors.white,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       child: Padding(
         padding: const EdgeInsets.all(20),
@@ -177,14 +193,14 @@ class _MiPerfilPageState extends State<MiPerfilPage> {
           children: [
             const Row(
               children: [
-                Icon(Icons.person, color: Colors.blue),
+                Icon(Icons.person, color: kColorPrimary), // Icono Café
                 SizedBox(width: 8),
                 Text(
                   'Información Personal',
                   style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
-                    color: Colors.black87,
+                    color: kColorText,
                   ),
                 ),
               ],
@@ -232,14 +248,18 @@ class _MiPerfilPageState extends State<MiPerfilPage> {
               child: ElevatedButton(
                 onPressed: _guardarCambios,
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.blue[700],
-                  foregroundColor: Colors.white,
+                  backgroundColor: kColorAccent, // Botón Dorado
+                  foregroundColor: kColorPrimary, // Texto Café
                   padding: const EdgeInsets.symmetric(vertical: 16),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12),
                   ),
+                  elevation: 2,
                 ),
-                child: const Text('Guardar Cambios'),
+                child: const Text(
+                  'GUARDAR CAMBIOS',
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
               ),
             ),
           ],
@@ -251,6 +271,7 @@ class _MiPerfilPageState extends State<MiPerfilPage> {
   Widget _buildSeccionPreferencias() {
     return Card(
       elevation: 4,
+      color: Colors.white,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       child: Padding(
         padding: const EdgeInsets.all(20),
@@ -259,14 +280,14 @@ class _MiPerfilPageState extends State<MiPerfilPage> {
           children: [
             const Row(
               children: [
-                Icon(Icons.settings, color: Colors.blue),
+                Icon(Icons.settings, color: kColorPrimary),
                 SizedBox(width: 8),
                 Text(
                   'Preferencias',
                   style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
-                    color: Colors.black87,
+                    color: kColorText,
                   ),
                 ),
               ],
@@ -331,6 +352,7 @@ class _MiPerfilPageState extends State<MiPerfilPage> {
   Widget _buildSeccionEstadisticas() {
     return Card(
       elevation: 4,
+      color: Colors.white,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       child: Padding(
         padding: const EdgeInsets.all(20),
@@ -339,14 +361,14 @@ class _MiPerfilPageState extends State<MiPerfilPage> {
           children: [
             const Row(
               children: [
-                Icon(Icons.analytics, color: Colors.blue),  // Corregido: Icons.analytics
+                Icon(Icons.analytics, color: kColorPrimary),
                 SizedBox(width: 8),
                 Text(
                   'Mis Estadísticas',
                   style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
-                    color: Colors.black87,
+                    color: kColorText,
                   ),
                 ),
               ],
@@ -361,7 +383,7 @@ class _MiPerfilPageState extends State<MiPerfilPage> {
                     titulo: 'Pedidos Totales',
                     valor: '24',
                     icono: Icons.shopping_bag,
-                    color: Colors.green,
+                    color: kColorPrimary, // Café
                   ),
                 ),
                 const SizedBox(width: 12),
@@ -370,7 +392,7 @@ class _MiPerfilPageState extends State<MiPerfilPage> {
                     titulo: 'Favoritos',
                     valor: '8',
                     icono: Icons.favorite,
-                    color: Colors.red,
+                    color: Colors.red[800]!, // Rojo oscuro
                   ),
                 ),
               ],
@@ -385,7 +407,7 @@ class _MiPerfilPageState extends State<MiPerfilPage> {
                     titulo: 'Puntos',
                     valor: '1,250',
                     icono: Icons.loyalty,
-                    color: Colors.amber,
+                    color: kColorAccent, // Dorado
                   ),
                 ),
                 const SizedBox(width: 12),
@@ -394,7 +416,7 @@ class _MiPerfilPageState extends State<MiPerfilPage> {
                     titulo: 'Ahorrado',
                     valor: '\$480',
                     icono: Icons.savings,
-                    color: Colors.blue,
+                    color: Colors.green[800]!, // Verde oscuro
                   ),
                 ),
               ],
@@ -408,6 +430,7 @@ class _MiPerfilPageState extends State<MiPerfilPage> {
   Widget _buildSeccionAcciones() {
     return Card(
       elevation: 4,
+      color: Colors.white,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       child: Padding(
         padding: const EdgeInsets.all(20),
@@ -419,7 +442,7 @@ class _MiPerfilPageState extends State<MiPerfilPage> {
               style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
-                color: Colors.black87,
+                color: kColorText,
               ),
             ),
 
@@ -470,7 +493,7 @@ class _MiPerfilPageState extends State<MiPerfilPage> {
               titulo: 'Cerrar Sesión',
               subtitulo: 'Salir de tu cuenta',
               onTap: _cerrarSesion,
-              color: Colors.red,
+              color: Colors.red[800], // Rojo elegante
             ),
           ],
         ),
@@ -489,15 +512,21 @@ class _MiPerfilPageState extends State<MiPerfilPage> {
       controller: controller,
       keyboardType: tipoTeclado,
       maxLines: maxLines,
+      cursorColor: kColorPrimary,
       decoration: InputDecoration(
         labelText: label,
-        prefixIcon: Icon(icon, color: Colors.blue),
+        labelStyle: TextStyle(color: Colors.grey[700]),
+        prefixIcon: Icon(icon, color: kColorPrimary),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
         ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: BorderSide(color: Colors.grey[400]!),
+        ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide(color: Colors.blue!),
+          borderSide: const BorderSide(color: kColorPrimary, width: 2), // Borde café al seleccionar
         ),
       ),
     );
@@ -520,6 +549,7 @@ class _MiPerfilPageState extends State<MiPerfilPage> {
                 style: const TextStyle(
                   fontWeight: FontWeight.w500,
                   fontSize: 16,
+                  color: kColorText,
                 ),
               ),
               const SizedBox(height: 4),
@@ -536,7 +566,8 @@ class _MiPerfilPageState extends State<MiPerfilPage> {
         Switch(
           value: valor,
           onChanged: onChanged,
-          activeColor: Colors.blue,
+          activeColor: kColorAccent, // Switch Dorado
+          activeTrackColor: kColorAccent.withOpacity(0.3),
         ),
       ],
     );
@@ -551,9 +582,9 @@ class _MiPerfilPageState extends State<MiPerfilPage> {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: color.withOpacity(0.1),
+        color: color.withOpacity(0.08),
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: color.withOpacity(0.3)),
+        border: Border.all(color: color.withOpacity(0.2)),
       ),
       child: Column(
         children: [
@@ -573,6 +604,7 @@ class _MiPerfilPageState extends State<MiPerfilPage> {
             style: TextStyle(
               fontSize: 12,
               color: Colors.grey[600],
+              fontWeight: FontWeight.w500,
             ),
             textAlign: TextAlign.center,
           ),
@@ -588,32 +620,37 @@ class _MiPerfilPageState extends State<MiPerfilPage> {
     required VoidCallback onTap,
     Color? color,
   }) {
+    final itemColor = color ?? kColorPrimary;
+
     return ListTile(
       leading: Container(
         width: 40,
         height: 40,
         decoration: BoxDecoration(
-          color: (color ?? Colors.blue).withOpacity(0.1),
+          color: itemColor.withOpacity(0.1),
           shape: BoxShape.circle,
         ),
-        child: Icon(icono, color: color ?? Colors.blue),
+        child: Icon(icono, color: itemColor, size: 20),
       ),
       title: Text(
         titulo,
         style: TextStyle(
           fontWeight: FontWeight.w500,
-          color: color ?? Colors.black87,
+          color: kColorText,
         ),
       ),
-      subtitle: Text(subtitulo),
-      trailing: const Icon(Icons.arrow_forward_ios, size: 16),
+      subtitle: Text(
+        subtitulo,
+        style: TextStyle(color: Colors.grey[600]),
+      ),
+      trailing: const Icon(Icons.arrow_forward_ios, size: 16, color: Colors.grey),
       onTap: onTap,
       contentPadding: EdgeInsets.zero,
     );
   }
 
   Widget _buildLineaDivisoria() {
-    return Divider(color: Colors.grey[300]);
+    return Divider(color: Colors.grey[200], height: 1);
   }
 
   // Métodos de ayuda
@@ -633,9 +670,12 @@ class _MiPerfilPageState extends State<MiPerfilPage> {
     });
 
     ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text('Cambios guardados exitosamente'),
-        backgroundColor: Colors.green,
+      SnackBar(
+        content: const Text(
+          'Cambios guardados exitosamente',
+          style: TextStyle(color: Colors.white),
+        ),
+        backgroundColor: Colors.green[800],
       ),
     );
   }
@@ -668,27 +708,28 @@ class _MiPerfilPageState extends State<MiPerfilPage> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Cerrar Sesión'),
+        title: const Text('Cerrar Sesión', style: TextStyle(color: kColorPrimary)),
         content: const Text('¿Estás seguro de que deseas cerrar tu sesión?'),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: const Text('Cancelar'),
+            child: const Text('Cancelar', style: TextStyle(color: Colors.grey)),
           ),
-          TextButton(
+          ElevatedButton(
             onPressed: () {
               Navigator.pop(context);
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(
                   content: Text('Sesión cerrada exitosamente'),
-                  backgroundColor: Colors.green,
+                  backgroundColor: kColorPrimary,
                 ),
               );
             },
-            child: const Text(
-              'Cerrar Sesión',
-              style: TextStyle(color: Colors.red),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.red[800],
+              foregroundColor: Colors.white,
             ),
+            child: const Text('Cerrar Sesión'),
           ),
         ],
       ),

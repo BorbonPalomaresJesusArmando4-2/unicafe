@@ -1,5 +1,12 @@
 import 'package:flutter/material.dart';
 
+// DEFINICIÓN DE COLORES (Misma paleta global)
+const Color kColorPrimary = Color(0xFF3E2723); // Café oscuro
+const Color kColorSecondary = Color(0xFF5D4037); // Café medio
+const Color kColorAccent = Color(0xFFFFAB00); // Ámbar/Dorado
+const Color kColorBackground = Color(0xFFFAFAFA); // Blanco hueso
+const Color kColorText = Color(0xFF3E2723); // Texto oscuro
+
 class PedidosPage extends StatefulWidget {
   const PedidosPage({super.key});
 
@@ -148,7 +155,7 @@ class _PedidosPageState extends State<PedidosPage> {
     return Container(
       height: MediaQuery.of(context).size.height * 0.85,
       decoration: const BoxDecoration(
-        color: Colors.white,
+        color: kColorBackground, // Fondo hueso
         borderRadius: BorderRadius.only(
           topLeft: Radius.circular(24),
           topRight: Radius.circular(24),
@@ -160,11 +167,18 @@ class _PedidosPageState extends State<PedidosPage> {
           Container(
             padding: const EdgeInsets.all(20),
             decoration: BoxDecoration(
-              color: _getColorEstado(pedido.estado).withOpacity(0.1),
+              color: Colors.white,
               borderRadius: const BorderRadius.only(
                 topLeft: Radius.circular(24),
                 topRight: Radius.circular(24),
               ),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.05),
+                  blurRadius: 10,
+                  offset: const Offset(0, 5),
+                )
+              ],
             ),
             child: Row(
               children: [
@@ -183,7 +197,7 @@ class _PedidosPageState extends State<PedidosPage> {
                         style: const TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
-                          color: Colors.black87,
+                          color: kColorText,
                         ),
                       ),
                       Text(
@@ -214,7 +228,7 @@ class _PedidosPageState extends State<PedidosPage> {
                     style: TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
-                      color: Colors.black87,
+                      color: kColorText,
                     ),
                   ),
 
@@ -238,7 +252,7 @@ class _PedidosPageState extends State<PedidosPage> {
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
-                        color: Colors.black87,
+                        color: kColorText,
                       ),
                     ),
                     const SizedBox(height: 8),
@@ -246,14 +260,16 @@ class _PedidosPageState extends State<PedidosPage> {
                       width: double.infinity,
                       padding: const EdgeInsets.all(12),
                       decoration: BoxDecoration(
-                        color: Colors.grey[50],
+                        color: Colors.white,
                         borderRadius: BorderRadius.circular(12),
+                        border: Border.all(color: Colors.grey[300]!),
                       ),
                       child: Text(
                         pedido.notas,
                         style: TextStyle(
                           fontSize: 14,
-                          color: Colors.grey[700],
+                          color: Colors.grey[800],
+                          fontStyle: FontStyle.italic,
                         ),
                       ),
                     ),
@@ -263,9 +279,10 @@ class _PedidosPageState extends State<PedidosPage> {
 
                   // Total
                   Container(
-                    padding: const EdgeInsets.symmetric(vertical: 12),
+                    padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
                     decoration: BoxDecoration(
-                      border: Border.all(color: Colors.grey[300]!),
+                      color: Colors.white,
+                      border: Border.all(color: kColorPrimary.withOpacity(0.2)),
                       borderRadius: BorderRadius.circular(12),
                     ),
                     child: Row(
@@ -276,15 +293,15 @@ class _PedidosPageState extends State<PedidosPage> {
                           style: TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
-                            color: Colors.black87,
+                            color: kColorText,
                           ),
                         ),
                         Text(
                           '\$${pedido.total.toStringAsFixed(2)}',
-                          style: TextStyle(
-                            fontSize: 20,
+                          style: const TextStyle(
+                            fontSize: 22,
                             fontWeight: FontWeight.bold,
-                            color: Colors.blue[700],
+                            color: kColorPrimary, // Precio en café
                           ),
                         ),
                       ],
@@ -302,13 +319,13 @@ class _PedidosPageState extends State<PedidosPage> {
                             child: ElevatedButton(
                               onPressed: () => _cambiarEstadoPedido(pedido, 'En Proceso'),
                               style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors.orange,
-                                foregroundColor: Colors.white,
+                                backgroundColor: kColorAccent, // Botón Dorado para acción positiva
+                                foregroundColor: kColorPrimary, // Texto Café
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(12),
                                 ),
                               ),
-                              child: const Text('Comenzar'),
+                              child: const Text('Comenzar', style: TextStyle(fontWeight: FontWeight.bold)),
                             ),
                           ),
                         if (pedido.estado == 'Pendientes') const SizedBox(width: 8),
@@ -317,7 +334,7 @@ class _PedidosPageState extends State<PedidosPage> {
                             child: ElevatedButton(
                               onPressed: () => _cambiarEstadoPedido(pedido, 'Completados'),
                               style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors.green,
+                                backgroundColor: Colors.green[800], // Verde oscuro elegante
                                 foregroundColor: Colors.white,
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(12),
@@ -331,8 +348,8 @@ class _PedidosPageState extends State<PedidosPage> {
                           child: OutlinedButton(
                             onPressed: () => _cambiarEstadoPedido(pedido, 'Cancelados'),
                             style: OutlinedButton.styleFrom(
-                              foregroundColor: Colors.red,
-                              side: const BorderSide(color: Colors.red),
+                              foregroundColor: Colors.red[800],
+                              side: BorderSide(color: Colors.red[800]!),
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(12),
                               ),
@@ -353,7 +370,10 @@ class _PedidosPageState extends State<PedidosPage> {
 
   Widget _buildItemProductoPedido(ProductoPedido producto) {
     return Card(
+      color: Colors.white,
       margin: const EdgeInsets.only(bottom: 8),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      elevation: 1,
       child: Padding(
         padding: const EdgeInsets.all(12),
         child: Column(
@@ -367,6 +387,7 @@ class _PedidosPageState extends State<PedidosPage> {
                     style: const TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
+                      color: kColorText,
                     ),
                   ),
                 ),
@@ -381,16 +402,16 @@ class _PedidosPageState extends State<PedidosPage> {
                 const SizedBox(width: 8),
                 Text(
                   '\$${(producto.precio * producto.cantidad).toStringAsFixed(2)}',
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
-                    color: Colors.blue[700],
+                    color: kColorPrimary, // Precio en café
                   ),
                 ),
               ],
             ),
             if (producto.personalizaciones.isNotEmpty) ...[
-              const SizedBox(height: 4),
+              const SizedBox(height: 6),
               Wrap(
                 spacing: 6,
                 runSpacing: 4,
@@ -398,10 +419,12 @@ class _PedidosPageState extends State<PedidosPage> {
                   return Chip(
                     label: Text(
                       personalizacion,
-                      style: const TextStyle(fontSize: 10),
+                      style: const TextStyle(fontSize: 10, color: kColorText),
                     ),
-                    backgroundColor: Colors.amber[50],
+                    backgroundColor: kColorAccent.withOpacity(0.2), // Fondo dorado suave
+                    side: BorderSide.none,
                     visualDensity: VisualDensity.compact,
+                    padding: EdgeInsets.zero,
                   );
                 }).toList(),
               ),
@@ -427,7 +450,7 @@ class _PedidosPageState extends State<PedidosPage> {
             Text('Pedido ${pedido.id} $nuevoEstado'),
           ],
         ),
-        backgroundColor: Colors.green,
+        backgroundColor: _getColorEstado(nuevoEstado),
         behavior: SnackBarBehavior.floating,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       ),
@@ -437,13 +460,13 @@ class _PedidosPageState extends State<PedidosPage> {
   Color _getColorEstado(String estado) {
     switch (estado) {
       case 'Pendientes':
-        return Colors.orange;
+        return Colors.orange[800]!; // Naranja quemado
       case 'En Proceso':
-        return Colors.blue;
+        return kColorPrimary; // Café (Proceso de preparación)
       case 'Completados':
-        return Colors.green;
+        return Colors.green[800]!; // Verde oscuro
       case 'Cancelados':
-        return Colors.red;
+        return Colors.red[800]!; // Rojo oscuro
       default:
         return Colors.grey;
     }
@@ -454,7 +477,7 @@ class _PedidosPageState extends State<PedidosPage> {
       case 'Pendientes':
         return Icons.access_time;
       case 'En Proceso':
-        return Icons.coffee;
+        return Icons.coffee_maker; // Icono de cafetera
       case 'Completados':
         return Icons.check_circle;
       case 'Cancelados':
@@ -493,6 +516,7 @@ class _PedidosPageState extends State<PedidosPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: kColorBackground, // Fondo hueso
       appBar: AppBar(
         title: const Text(
           'Mis Pedidos',
@@ -501,7 +525,7 @@ class _PedidosPageState extends State<PedidosPage> {
             color: Colors.white,
           ),
         ),
-        backgroundColor: Colors.blue[700],
+        backgroundColor: kColorPrimary, // AppBar Café
         foregroundColor: Colors.white,
         elevation: 0,
       ),
@@ -527,12 +551,13 @@ class _PedidosPageState extends State<PedidosPage> {
       padding: const EdgeInsets.all(16),
       child: TextField(
         controller: _busquedaController,
+        cursorColor: kColorPrimary,
         decoration: InputDecoration(
           hintText: 'Buscar pedidos...',
-          prefixIcon: const Icon(Icons.search),
+          prefixIcon: const Icon(Icons.search, color: kColorPrimary),
           suffixIcon: _terminoBusqueda.isNotEmpty
               ? IconButton(
-            icon: const Icon(Icons.clear),
+            icon: const Icon(Icons.clear, color: Colors.grey),
             onPressed: () {
               _busquedaController.clear();
               setState(() {
@@ -546,7 +571,15 @@ class _PedidosPageState extends State<PedidosPage> {
             borderSide: BorderSide.none,
           ),
           filled: true,
-          fillColor: Colors.grey[100],
+          fillColor: Colors.white,
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(12),
+            borderSide: BorderSide(color: Colors.grey[300]!),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(12),
+            borderSide: const BorderSide(color: kColorPrimary, width: 2),
+          ),
         ),
         onChanged: (value) {
           setState(() {
@@ -577,28 +610,34 @@ class _PedidosPageState extends State<PedidosPage> {
                 });
               },
               borderRadius: BorderRadius.circular(16),
-              child: Container(
+              child: AnimatedContainer(
+                duration: const Duration(milliseconds: 300),
                 padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                 decoration: BoxDecoration(
-                  color: isSelected ? Colors.blue[700] : Colors.grey[100],
+                  // CAMBIO: Fondo café si está seleccionado
+                  color: isSelected ? kColorPrimary : Colors.white,
                   borderRadius: BorderRadius.circular(16),
                   border: Border.all(
-                    color: isSelected ? Colors.blue[700]! : Colors.grey[300]!,
+                    color: isSelected ? kColorPrimary : Colors.grey[300]!,
                   ),
+                  boxShadow: isSelected
+                      ? [BoxShadow(color: kColorPrimary.withOpacity(0.3), blurRadius: 4, offset: const Offset(0, 2))]
+                      : [],
                 ),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Icon(
                       estado.icono,
-                      color: isSelected ? Colors.white : Colors.blue[700],
+                      // CAMBIO: Icono dorado si está seleccionado, café si no
+                      color: isSelected ? kColorAccent : kColorPrimary,
                       size: 20,
                     ),
                     const SizedBox(height: 4),
                     Text(
                       estado.nombre,
                       style: TextStyle(
-                        color: isSelected ? Colors.white : Colors.black87,
+                        color: isSelected ? Colors.white : kColorText,
                         fontWeight: FontWeight.w500,
                         fontSize: 12,
                       ),
@@ -617,15 +656,15 @@ class _PedidosPageState extends State<PedidosPage> {
     final pedidos = _getPedidosFiltrados();
 
     if (pedidos.isEmpty) {
-      return const Center(
+      return Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(Icons.receipt_long, size: 64, color: Colors.grey),
-            SizedBox(height: 16),
+            Icon(Icons.receipt_long, size: 64, color: Colors.grey[400]),
+            const SizedBox(height: 16),
             Text(
               'No se encontraron pedidos',
-              style: TextStyle(fontSize: 16, color: Colors.grey),
+              style: TextStyle(fontSize: 16, color: Colors.grey[600]),
             ),
           ],
         ),
@@ -644,6 +683,7 @@ class _PedidosPageState extends State<PedidosPage> {
 
   Widget _buildItemPedido(Pedido pedido) {
     return Card(
+      color: Colors.white,
       margin: const EdgeInsets.only(bottom: 12),
       elevation: 2,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
@@ -670,7 +710,7 @@ class _PedidosPageState extends State<PedidosPage> {
                       style: const TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
-                        color: Colors.black87,
+                        color: kColorText,
                       ),
                     ),
                   ),
@@ -744,8 +784,8 @@ class _PedidosPageState extends State<PedidosPage> {
                             'Nota: ${pedido.notas}',
                             style: TextStyle(
                               fontSize: 12,
-                              color: Colors.orange[700],
-                              fontStyle: FontStyle.italic,
+                              color: kColorAccent, // Notas en dorado/ámbar
+                              fontWeight: FontWeight.bold,
                             ),
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
@@ -755,10 +795,10 @@ class _PedidosPageState extends State<PedidosPage> {
                   ),
                   Text(
                     'Total: \$${pedido.total.toStringAsFixed(2)}',
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
-                      color: Colors.blue[700],
+                      color: kColorPrimary, // Precio en café
                     ),
                   ),
                 ],
