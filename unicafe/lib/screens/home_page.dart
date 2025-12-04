@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 
-//cambiado por AngelPro99
+const Color kColorPrimary = Color(0xFF3E2723); // Café oscuro
+const Color kColorSecondary = Color(0xFF5D4037); // Café medio
+const Color kColorAccent = Color(0xFFFFAB00); // Ámbar/Dorado
+const Color kColorBackground = Color(0xFFFAFAFA); // Blanco hueso
+const Color kColorText = Color(0xFF3E2723); // Texto oscuro
 
-// 1. Convertido a StatefulWidget
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
@@ -11,21 +14,21 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  // 2. Lista para almacenar los artículos del pedido
   final List<Map<String, dynamic>> _orderItems = [];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: kColorBackground, // Fondo general
       appBar: AppBar(
         title: const Text(
-          "Unicafé",
+          "La Fondita del Coyote",
           style: TextStyle(
             fontWeight: FontWeight.bold,
             color: Colors.white,
           ),
         ),
-        backgroundColor: Colors.blue[700],
+        backgroundColor: kColorPrimary, // CAMBIO: Azul a Café
         elevation: 4,
         iconTheme: const IconThemeData(color: Colors.white),
       ),
@@ -38,26 +41,27 @@ class _HomePageState extends State<HomePage> {
           children: [
             _buildBanner(),
             _buildCategoriesSection(),
-            _buildFeaturedProducts(), // Ya no necesita 'context'
+            _buildFeaturedProducts(),
             _buildPromotionsSection(),
           ],
         ),
       ),
 
-      // 1. Botón Flotante (FAB) agregado
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          // 3. Llama a la página del pedido
           _showOrderPage(context);
         },
-        backgroundColor: Colors.blue[700],
+        backgroundColor: kColorAccent, // CAMBIO: Botón dorado
         child: Badge(
-          // 2. Badge para el contador
-          label: Text(_orderItems.length.toString()),
+          label: Text(
+            _orderItems.length.toString(),
+            style: const TextStyle(color: Colors.white),
+          ),
+          backgroundColor: kColorPrimary, // Badge café
           isLabelVisible: _orderItems.isNotEmpty,
           child: const Icon(
             Icons.shopping_cart,
-            color: Colors.white,
+            color: kColorPrimary, // Icono café sobre fondo dorado
           ),
         ),
       ),
@@ -67,14 +71,15 @@ class _HomePageState extends State<HomePage> {
   Widget _buildDrawer(BuildContext context) {
     return Drawer(
       child: Container(
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
+          // CAMBIO: Gradiente de cafés
           gradient: LinearGradient(
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
             colors: [
-              Colors.blue[800]!,
-              Colors.blue[600]!,
-              Colors.blue[400]!,
+              kColorPrimary,
+              kColorSecondary,
+              Color(0xFF8D6E63),
             ],
           ),
         ),
@@ -100,12 +105,12 @@ class _HomePageState extends State<HomePage> {
                   style: TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.bold,
-                    color: Colors.blue[700],
+                    color: kColorPrimary, // Texto café
                   ),
                 ),
               ),
-              decoration: BoxDecoration(
-                color: Colors.blue[700],
+              decoration: const BoxDecoration(
+                color: Colors.transparent, // Transparente para ver el gradiente
               ),
             ),
             _buildDrawerItem(
@@ -182,12 +187,12 @@ class _HomePageState extends State<HomePage> {
       child: ListTile(
         leading: Icon(
           icon,
-          color: isLogout ? Colors.red[300] : Colors.white,
+          color: isLogout ? Colors.red[200] : Colors.white,
         ),
         title: Text(
           title,
           style: TextStyle(
-            color: isLogout ? Colors.red[300] : Colors.white,
+            color: isLogout ? Colors.red[200] : Colors.white,
             fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
           ),
         ),
@@ -233,17 +238,21 @@ class _HomePageState extends State<HomePage> {
         builder: (context) => Scaffold(
           appBar: AppBar(
             title: const Text('Próximamente'),
-            backgroundColor: Colors.blue[700],
+            backgroundColor: kColorPrimary, // CAMBIO
+            foregroundColor: Colors.white,
           ),
           body: Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Icon(Icons.build, size: 80, color: Colors.blue[300]),
+                Icon(Icons.coffee_maker, size: 80, color: kColorSecondary), // CAMBIO: Icono
                 const SizedBox(height: 20),
                 const Text(
                   'Funcionalidad en Desarrollo',
-                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                  style: TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                      color: kColorPrimary),
                 ),
                 const SizedBox(height: 16),
                 const Text(
@@ -265,17 +274,17 @@ class _HomePageState extends State<HomePage> {
       margin: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(16),
-        gradient: LinearGradient(
+        gradient: const LinearGradient(
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
           colors: [
-            Colors.blue[600]!,
-            Colors.blue[800]!,
+            Color(0xFF4E342E), // Café claro
+            Color(0xFF3E2723), // Café oscuro
           ],
         ),
         boxShadow: [
           BoxShadow(
-            color: Colors.blue.withOpacity(0.4),
+            color: Colors.black.withOpacity(0.2),
             blurRadius: 8,
             offset: const Offset(0, 4),
           ),
@@ -287,7 +296,7 @@ class _HomePageState extends State<HomePage> {
             right: -50,
             top: -20,
             child: Icon(
-              Icons.coffee,
+              Icons.dining,
               size: 200,
               color: Colors.white.withOpacity(0.1),
             ),
@@ -299,7 +308,7 @@ class _HomePageState extends State<HomePage> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  'UNICAFE',
+                  'La mejor comida de UTH al alcance de tu mano',
                   style: TextStyle(
                     fontSize: 28,
                     fontWeight: FontWeight.bold,
@@ -308,7 +317,7 @@ class _HomePageState extends State<HomePage> {
                 ),
                 SizedBox(height: 8),
                 Text(
-                  'Desayunos, comidas, postres y snacks',
+                  'Desayunos, comidas, postres, bebidas, snacks y helados',
                   style: TextStyle(
                     fontSize: 16,
                     color: Colors.white70,
@@ -316,12 +325,14 @@ class _HomePageState extends State<HomePage> {
                 ),
                 SizedBox(height: 16),
                 Chip(
-                  backgroundColor: Colors.amber,
+                  backgroundColor: kColorAccent,
+                  side: const BorderSide(color: Colors.black, width: 1.5),
+
                   label: Text(
-                    '¡20% de descuento en tu primer pedido!',
+                    'Ordena hoy y obten 30 pesos de descuento',
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
-                      color: Colors.blue,
+                      color: kColorPrimary,
                     ),
                   ),
                 ),
@@ -338,33 +349,40 @@ class _HomePageState extends State<HomePage> {
       {'icon': Icons.breakfast_dining, 'name': 'Desayunos', 'color': Colors.orange},
       {'icon': Icons.lunch_dining, 'name': 'Comidas', 'color': Colors.green},
       {'icon': Icons.cake, 'name': 'Postres', 'color': Colors.pink},
-      {'icon': Icons.local_cafe, 'name': 'Bebidas', 'color': Colors.blue},
+      {'icon': Icons.local_cafe, 'name': 'Bebidas', 'color': Colors.brown},
       {'icon': Icons.fastfood, 'name': 'Snacks', 'color': Colors.amber},
+      {'icon': Icons.icecream, 'name': 'Helados', 'color': Colors.purple}, // Agregué uno extra para ejemplo de llenado
     ];
 
     return Padding(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start, // Alineado a la izquierda se ve más ordenado si son muchos
         children: [
-          const Text(
-            'Categorías',
-            style: TextStyle(
-              fontSize: 22,
-              fontWeight: FontWeight.bold,
-              color: Colors.blue,
+          const Center( // <--- Agrega esto
+            child: Text(
+              'Categorías',
+              style: TextStyle(
+                fontSize: 22,
+                fontWeight: FontWeight.bold,
+                color: kColorText,
+              ),
             ),
           ),
-          const SizedBox(height: 16),
-          SizedBox(
-            height: 100,
-            child: ListView.builder(
-              scrollDirection: Axis.horizontal,
-              itemCount: categories.length,
-              itemBuilder: (context, index) {
-                return _buildCategoryCard(categories[index]);
-              },
+          const SizedBox(height: 12),
+          GridView.builder(
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 6, // 4 Columnas: Las hace más pequeñas automáticamente
+              crossAxisSpacing: 10,
+              mainAxisSpacing: 10,
+              childAspectRatio: 1.0, // 1.0 = Cuadrado perfecto (altura normal)
             ),
+            itemCount: categories.length,
+            itemBuilder: (context, index) {
+              return _buildCategoryCard(categories[index]);
+            },
           ),
         ],
       ),
@@ -373,34 +391,48 @@ class _HomePageState extends State<HomePage> {
 
   Widget _buildCategoryCard(Map<String, dynamic> category) {
     return Container(
-      width: 80,
-      margin: const EdgeInsets.only(right: 12),
-      child: Column(
-        children: [
-          Container(
-            width: 60,
-            height: 60,
-            decoration: BoxDecoration(
-              color: category['color'].withOpacity(0.2),
-              borderRadius: BorderRadius.circular(30),
-              border: Border.all(color: category['color'].withOpacity(0.3)),
-            ),
-            child: Icon(
-              category['icon'],
-              size: 30,
-              color: category['color'],
-            ),
-          ),
-          const SizedBox(height: 8),
-          Text(
-            category['name'],
-            textAlign: TextAlign.center,
-            style: const TextStyle(
-              fontSize: 12,
-              fontWeight: FontWeight.w500,
-            ),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(12), // Bordes menos redondeados para ahorrar espacio visual
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.1),
+            blurRadius: 4,
+            offset: const Offset(0, 2),
           ),
         ],
+        border: Border.all(
+          color: category['color'].withOpacity(0.3),
+          width: 1,
+        ),
+      ),
+      child: InkWell(
+        onTap: () {
+          // Acción al tocar
+        },
+        borderRadius: BorderRadius.circular(12),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(
+              category['icon'],
+              size: 30, // Icono de tamaño estándar
+              color: category['color'],
+            ),
+            const SizedBox(height: 6), // Menos espacio entre icono y texto
+            Text(
+              category['name'],
+              textAlign: TextAlign.center,
+              maxLines: 1, // Asegura que no crezca verticalmente
+              overflow: TextOverflow.ellipsis,
+              style: const TextStyle(
+                fontSize: 11, // Texto compacto
+                fontWeight: FontWeight.w600,
+                color: Color(0xFF3E2723),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -412,21 +444,21 @@ class _HomePageState extends State<HomePage> {
         'description': 'Huevos revueltos con jamón, jugo de frutas y café',
         'price': '\$120',
         'category': 'Desayunos',
-        'color': Colors.orange[100]!,
+        'color': Colors.orange[50]!,
       },
       {
         'name': 'Ensalada César',
         'description': 'Ensalada fresca con pollo y aderezo césar',
         'price': '\$95',
         'category': 'Comidas',
-        'color': Colors.green[100]!,
+        'color': Colors.green[50]!,
       },
       {
         'name': 'Cheesecake',
         'description': 'Delicioso cheesecake de fresa',
         'price': '\$65',
         'category': 'Postres',
-        'color': Colors.pink[100]!,
+        'color': Colors.pink[50]!,
       },
     ];
 
@@ -435,12 +467,14 @@ class _HomePageState extends State<HomePage> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
-            'Productos Destacados',
-            style: TextStyle(
-              fontSize: 22,
-              fontWeight: FontWeight.bold,
-              color: Colors.blue,
+          const Center(
+            child: Text(
+              'Productos Destacados',
+              style: TextStyle(
+                fontSize: 22,
+                fontWeight: FontWeight.bold,
+                color: kColorText,
+              ),
             ),
           ),
           const SizedBox(height: 16),
@@ -452,11 +486,13 @@ class _HomePageState extends State<HomePage> {
 
   Widget _buildProductCard(Map<String, dynamic> product) {
     return Card(
-      elevation: 3,
+      elevation: 2,
       margin: const EdgeInsets.only(bottom: 12),
+      color: Colors.white,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       child: Container(
         decoration: BoxDecoration(
+          // Fondo sutil según el producto
           gradient: LinearGradient(
             begin: Alignment.centerLeft,
             end: Alignment.centerRight,
@@ -487,7 +523,7 @@ class _HomePageState extends State<HomePage> {
                 ),
                 child: Icon(
                   Icons.restaurant,
-                  color: Colors.blue[600],
+                  color: kColorPrimary, // CAMBIO: Icono café
                 ),
               ),
               const SizedBox(width: 12),
@@ -507,7 +543,8 @@ class _HomePageState extends State<HomePage> {
                     const SizedBox(height: 4),
                     Text(
                       product['description'],
-                      style: const TextStyle(fontSize: 14),
+                      style: TextStyle(
+                          fontSize: 14, color: Colors.grey[800]),
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                     ),
@@ -515,14 +552,14 @@ class _HomePageState extends State<HomePage> {
                     Container(
                       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
                       decoration: BoxDecoration(
-                        color: Colors.blue.withOpacity(0.1),
+                        color: kColorPrimary.withOpacity(0.1), // Fondo café suave
                         borderRadius: BorderRadius.circular(4),
                       ),
                       child: Text(
                         product['category'],
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontSize: 12,
-                          color: Colors.blue[700],
+                          color: kColorPrimary, // Texto café
                           fontWeight: FontWeight.w500,
                         ),
                       ),
@@ -537,16 +574,15 @@ class _HomePageState extends State<HomePage> {
                 children: [
                   Text(
                     product['price'],
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
-                      color: Colors.green,
+                      color: Colors.green[700],
                     ),
                   ),
                   const SizedBox(height: 8),
                   ElevatedButton(
                     onPressed: () {
-                      // 3. Lógica actualizada del botón
                       setState(() {
                         _orderItems.add(product);
                       });
@@ -558,8 +594,8 @@ class _HomePageState extends State<HomePage> {
                       );
                     },
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.blue[600],
-                      foregroundColor: Colors.white,
+                      backgroundColor: kColorAccent, // CAMBIO: Dorado
+                      foregroundColor: kColorPrimary, // Texto café para contraste
                       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(20),
@@ -582,12 +618,14 @@ class _HomePageState extends State<HomePage> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
-            'Promociones Especiales',
-            style: TextStyle(
-              fontSize: 22,
-              fontWeight: FontWeight.bold,
-              color: Colors.blue,
+          const Center(
+            child: Text(
+              'Productos Destacados',
+              style: TextStyle(
+                fontSize: 22,
+                fontWeight: FontWeight.bold,
+                color: kColorText,
+              ),
             ),
           ),
           const SizedBox(height: 16),
@@ -617,14 +655,15 @@ class _HomePageState extends State<HomePage> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          '2x1 en Cafés Especiales',
+                          'Café Gratis en la compra del desayuno',
                           style: TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
+                            color: Color(0xFFE65100),
                           ),
                         ),
                         SizedBox(height: 4),
-                        Text('Todos los días de 3:00 PM a 6:00 PM'),
+                        Text('Todos los días de 8 AM a 10 AM'),
                       ],
                     ),
                   ),
@@ -637,17 +676,14 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  // 3. Función _showOrderPage RESTAURADA
   void _showOrderPage(BuildContext context) {
-    // Calcular el total
     double total = 0.0;
     for (var item in _orderItems) {
       try {
-        // Extraer el número del string de precio (ej. "$120")
         String priceString = item['price'].replaceAll('\$', '');
         total += double.parse(priceString);
       } catch (e) {
-        print('Error al parsear el precio: ${item['price']}');
+        // Ignorar error de parseo
       }
     }
 
@@ -657,7 +693,7 @@ class _HomePageState extends State<HomePage> {
         builder: (context) => Scaffold(
           appBar: AppBar(
             title: const Text('Mi Pedido'),
-            backgroundColor: Colors.blue[700],
+            backgroundColor: kColorPrimary, // CAMBIO
             iconTheme: const IconThemeData(color: Colors.white),
             titleTextStyle: const TextStyle(
               color: Colors.white,
@@ -677,13 +713,14 @@ class _HomePageState extends State<HomePage> {
             itemBuilder: (context, index) {
               final item = _orderItems[index];
               return ListTile(
+                leading: Icon(Icons.coffee, color: kColorSecondary),
                 title: Text(item['name']),
                 subtitle: Text(item['description']),
                 trailing: Text(
                   item['price'],
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontWeight: FontWeight.bold,
-                    color: Colors.green,
+                    color: Colors.green[700],
                     fontSize: 16,
                   ),
                 ),
@@ -703,15 +740,14 @@ class _HomePageState extends State<HomePage> {
                     style: const TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
-                      color: Colors.blue,
+                      color: kColorPrimary, // CAMBIO
                     ),
                   ),
                   ElevatedButton(
                     onPressed: () {
-                      // Lógica de pago (simulación)
-                      Navigator.pop(context); // Cierra la página del pedido
+                      Navigator.pop(context);
                       setState(() {
-                        _orderItems.clear(); // Limpia el carrito
+                        _orderItems.clear();
                       });
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(
@@ -746,7 +782,7 @@ class _HomePageState extends State<HomePage> {
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
-              child: const Text("Cancelar"),
+              child: const Text("Cancelar", style: TextStyle(color: Colors.grey)),
             ),
             ElevatedButton(
               onPressed: () {
@@ -760,6 +796,7 @@ class _HomePageState extends State<HomePage> {
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.red,
+                foregroundColor: Colors.white,
               ),
               child: const Text("Cerrar Sesión"),
             ),

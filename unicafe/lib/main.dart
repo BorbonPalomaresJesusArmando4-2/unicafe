@@ -21,11 +21,21 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: "Unicafé",
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-        visualDensity: VisualDensity.adaptivePlatformDensity,
-      ),
+      // This property belongs directly to MaterialApp
       debugShowCheckedModeBanner: false,
+
+      theme: ThemeData( // ThemeData starts here
+        useMaterial3: true,
+        colorScheme: ColorScheme.fromSeed( // fromSeed starts here
+          seedColor: const Color(0xFF3E2723),
+          primary: const Color(0xFF3E2723),
+          secondary: const Color(0xFFD7CCC8),
+          tertiary: const Color(0xFFFFAB00),
+          surface: const Color(0xFFFAFAFA),
+          brightness: Brightness.light,
+        ),
+      ),
+
       initialRoute: '/',
       routes: {
         '/': (context) => const HomePage(),
@@ -37,8 +47,10 @@ class MyApp extends StatelessWidget {
         '/menu': (context) => const MenuCompletoPage(),
         '/perfil': (context) => const MiPerfilPage(),
         '/pedidos': (context) => const PedidosPage(),
-        '/registro': (context) => RegistroUsuario(),
+        // It's good practice to add 'const' here if RegistroUsuario's constructor is const
+        '/registro': (context) => const RegistroUsuario(),
       },
     );
   }
 }
+
