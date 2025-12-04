@@ -1,5 +1,12 @@
 import 'package:flutter/material.dart';
 
+// DEFINICIÓN DE COLORES (Misma paleta que en Home)
+const Color kColorPrimary = Color(0xFF3E2723); // Café oscuro
+const Color kColorSecondary = Color(0xFF5D4037); // Café medio
+const Color kColorAccent = Color(0xFFFFAB00); // Ámbar/Dorado
+const Color kColorBackground = Color(0xFFFAFAFA); // Blanco hueso
+const Color kColorText = Color(0xFF3E2723); // Texto oscuro
+
 class CarteraPage extends StatefulWidget {
   const CarteraPage({super.key});
 
@@ -8,7 +15,7 @@ class CarteraPage extends StatefulWidget {
 }
 
 class _CarteraPageState extends State<CarteraPage> {
-  double _saldo = 1250.50;
+  double _saldo = 1000;
   final List<Map<String, dynamic>> _recargas = [
     {
       'fecha': '15 Ene 2024',
@@ -39,20 +46,20 @@ class _CarteraPageState extends State<CarteraPage> {
       'numero': '**** 1234',
       'vencimiento': '12/25',
       'principal': true,
-      'color': Colors.blue,
+      'color': Colors.blue[900], // Mantenemos azul oscuro para Visa
     },
     {
       'tipo': 'MasterCard',
       'numero': '**** 5678',
       'vencimiento': '08/26',
       'principal': false,
-      'color': Colors.red,
+      'color': Colors.red[800], // Rojo oscuro para Mastercard
     },
   ];
 
   void _mostrarDialogoRecarga() {
     final TextEditingController montoController = TextEditingController();
-    String _metodoSeleccionado = _tarjetas.isNotEmpty ? _tarjetas[0]['numero'] : 'Efectivo';
+    String metodoSeleccionado = _tarjetas.isNotEmpty ? _tarjetas[0]['numero'] : 'Efectivo';
 
     showDialog(
       context: context,
@@ -60,7 +67,7 @@ class _CarteraPageState extends State<CarteraPage> {
         return AlertDialog(
           title: const Row(
             children: [
-              Icon(Icons.account_balance_wallet, color: Colors.blue),
+              Icon(Icons.account_balance_wallet, color: kColorPrimary), // CAMBIO: Icono Café
               SizedBox(width: 8),
               Text('Recargar Saldo'),
             ],
@@ -76,11 +83,11 @@ class _CarteraPageState extends State<CarteraPage> {
                 // Método de pago
                 const Text(
                   'Método de Pago:',
-                  style: TextStyle(fontWeight: FontWeight.bold),
+                  style: TextStyle(fontWeight: FontWeight.bold, color: kColorText),
                 ),
                 const SizedBox(height: 8),
                 DropdownButtonFormField<String>(
-                  value: _metodoSeleccionado,
+                  value: metodoSeleccionado,
                   items: [
                     ..._tarjetas.map((tarjeta) => DropdownMenuItem(
                       value: tarjeta['numero'],
@@ -107,10 +114,13 @@ class _CarteraPageState extends State<CarteraPage> {
                     ),
                   ],
                   onChanged: (value) {
-                    _metodoSeleccionado = value!;
+                    metodoSeleccionado = value!;
                   },
                   decoration: const InputDecoration(
                     border: OutlineInputBorder(),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: kColorPrimary),
+                    ),
                   ),
                 ),
 
@@ -119,7 +129,7 @@ class _CarteraPageState extends State<CarteraPage> {
                 // Monto
                 const Text(
                   'Monto a Recargar:',
-                  style: TextStyle(fontWeight: FontWeight.bold),
+                  style: TextStyle(fontWeight: FontWeight.bold, color: kColorText),
                 ),
                 const SizedBox(height: 8),
                 TextFormField(
@@ -129,6 +139,9 @@ class _CarteraPageState extends State<CarteraPage> {
                     labelText: 'Monto',
                     prefixText: '\$',
                     border: OutlineInputBorder(),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: kColorPrimary),
+                    ),
                     hintText: '0.00',
                   ),
                   validator: (value) {
@@ -148,7 +161,7 @@ class _CarteraPageState extends State<CarteraPage> {
                 // Montos rápidos
                 const Text(
                   'Monto Rápido:',
-                  style: TextStyle(fontWeight: FontWeight.bold),
+                  style: TextStyle(fontWeight: FontWeight.bold, color: kColorText),
                 ),
                 const SizedBox(height: 8),
                 Wrap(
@@ -158,8 +171,19 @@ class _CarteraPageState extends State<CarteraPage> {
                     return ChoiceChip(
                       label: Text('\$$monto'),
                       selected: montoController.text == monto.toString(),
+                      selectedColor: kColorAccent, // CAMBIO: Dorado al seleccionar
+                      labelStyle: TextStyle(
+                        color: montoController.text == monto.toString()
+                            ? kColorPrimary
+                            : Colors.black,
+                        fontWeight: montoController.text == monto.toString()
+                            ? FontWeight.bold
+                            : FontWeight.normal,
+                      ),
                       onSelected: (selected) {
                         montoController.text = monto.toString();
+                        // Forzar reconstrucción para actualizar color del chip
+                        (context as Element).markNeedsBuild();
                       },
                     );
                   }).toList(),
@@ -170,19 +194,19 @@ class _CarteraPageState extends State<CarteraPage> {
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
-              child: const Text('Cancelar'),
+              child: const Text('Cancelar', style: TextStyle(color: Colors.grey)),
             ),
             ElevatedButton(
               onPressed: () {
                 final monto = double.tryParse(montoController.text);
                 if (monto != null && monto > 0) {
-                  _recargarSaldo(monto, _metodoSeleccionado);
+                  _recargarSaldo(monto, metodoSeleccionado);
                   Navigator.pop(context);
                 }
               },
               style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.blue[700],
-                foregroundColor: Colors.white,
+                backgroundColor: kColorAccent, // CAMBIO: Botón dorado
+                foregroundColor: kColorPrimary, // Texto café
               ),
               child: const Text('Recargar'),
             ),
@@ -207,7 +231,7 @@ class _CarteraPageState extends State<CarteraPage> {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text('Recarga exitosa: \$$monto'),
-        backgroundColor: Colors.green,
+        backgroundColor: Colors.green[700],
         duration: const Duration(seconds: 3),
       ),
     );
@@ -233,7 +257,7 @@ class _CarteraPageState extends State<CarteraPage> {
     final TextEditingController nombreController = TextEditingController();
     final TextEditingController vencimientoController = TextEditingController();
     final TextEditingController cvvController = TextEditingController();
-    String _tipoTarjetaSeleccionada = 'Visa';
+    String tipoTarjetaSeleccionada = 'Visa';
 
     showDialog(
       context: context,
@@ -241,7 +265,7 @@ class _CarteraPageState extends State<CarteraPage> {
         return AlertDialog(
           title: const Row(
             children: [
-              Icon(Icons.credit_card, color: Colors.blue),
+              Icon(Icons.credit_card, color: kColorPrimary), // CAMBIO
               SizedBox(width: 8),
               Text('Agregar Tarjeta'),
             ],
@@ -254,11 +278,11 @@ class _CarteraPageState extends State<CarteraPage> {
                 // Tipo de tarjeta
                 const Text(
                   'Tipo de Tarjeta:',
-                  style: TextStyle(fontWeight: FontWeight.bold),
+                  style: TextStyle(fontWeight: FontWeight.bold, color: kColorText),
                 ),
                 const SizedBox(height: 8),
                 DropdownButtonFormField<String>(
-                  value: _tipoTarjetaSeleccionada,
+                  value: tipoTarjetaSeleccionada,
                   items: const [
                     DropdownMenuItem(
                       value: 'Visa',
@@ -292,10 +316,13 @@ class _CarteraPageState extends State<CarteraPage> {
                     ),
                   ],
                   onChanged: (value) {
-                    _tipoTarjetaSeleccionada = value!;
+                    tipoTarjetaSeleccionada = value!;
                   },
                   decoration: const InputDecoration(
                     border: OutlineInputBorder(),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: kColorPrimary),
+                    ),
                   ),
                 ),
 
@@ -308,6 +335,9 @@ class _CarteraPageState extends State<CarteraPage> {
                   decoration: const InputDecoration(
                     labelText: 'Número de Tarjeta',
                     border: OutlineInputBorder(),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: kColorPrimary),
+                    ),
                     hintText: '1234 5678 9012 3456',
                   ),
                   maxLength: 19,
@@ -321,6 +351,9 @@ class _CarteraPageState extends State<CarteraPage> {
                   decoration: const InputDecoration(
                     labelText: 'Nombre en la Tarjeta',
                     border: OutlineInputBorder(),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: kColorPrimary),
+                    ),
                     hintText: 'JUAN PEREZ',
                   ),
                 ),
@@ -336,6 +369,9 @@ class _CarteraPageState extends State<CarteraPage> {
                         decoration: const InputDecoration(
                           labelText: 'MM/AA',
                           border: OutlineInputBorder(),
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color: kColorPrimary),
+                          ),
                           hintText: '12/25',
                         ),
                         maxLength: 5,
@@ -349,6 +385,9 @@ class _CarteraPageState extends State<CarteraPage> {
                         decoration: const InputDecoration(
                           labelText: 'CVV',
                           border: OutlineInputBorder(),
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color: kColorPrimary),
+                          ),
                           hintText: '123',
                         ),
                         maxLength: 3,
@@ -363,7 +402,7 @@ class _CarteraPageState extends State<CarteraPage> {
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
-              child: const Text('Cancelar'),
+              child: const Text('Cancelar', style: TextStyle(color: Colors.grey)),
             ),
             ElevatedButton(
               onPressed: () {
@@ -372,7 +411,7 @@ class _CarteraPageState extends State<CarteraPage> {
                     vencimientoController.text.isNotEmpty &&
                     cvvController.text.isNotEmpty) {
                   _agregarTarjeta(
-                    _tipoTarjetaSeleccionada,
+                    tipoTarjetaSeleccionada,
                     numeroController.text,
                     vencimientoController.text,
                   );
@@ -380,8 +419,8 @@ class _CarteraPageState extends State<CarteraPage> {
                 }
               },
               style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.blue[700],
-                foregroundColor: Colors.white,
+                backgroundColor: kColorAccent, // CAMBIO: Botón dorado
+                foregroundColor: kColorPrimary,
               ),
               child: const Text('Agregar Tarjeta'),
             ),
@@ -408,7 +447,7 @@ class _CarteraPageState extends State<CarteraPage> {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text('Tarjeta $tipo agregada exitosamente'),
-        backgroundColor: Colors.green,
+        backgroundColor: Colors.green[700],
       ),
     );
   }
@@ -416,11 +455,11 @@ class _CarteraPageState extends State<CarteraPage> {
   Color _obtenerColorTarjeta(String tipo) {
     switch (tipo) {
       case 'Visa':
-        return Colors.blue;
+        return Colors.blue[900]!;
       case 'MasterCard':
-        return Colors.red;
+        return Colors.red[800]!;
       case 'American Express':
-        return Colors.green;
+        return Colors.green[800]!;
       default:
         return Colors.grey;
     }
@@ -436,7 +475,7 @@ class _CarteraPageState extends State<CarteraPage> {
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(
         content: Text('Tarjeta establecida como principal'),
-        backgroundColor: Colors.blue,
+        backgroundColor: kColorPrimary, // CAMBIO: Café
       ),
     );
   }
@@ -451,7 +490,7 @@ class _CarteraPageState extends State<CarteraPage> {
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
-              child: const Text('Cancelar'),
+              child: const Text('Cancelar', style: TextStyle(color: Colors.grey)),
             ),
             ElevatedButton(
               onPressed: () {
@@ -460,14 +499,15 @@ class _CarteraPageState extends State<CarteraPage> {
                 });
                 Navigator.pop(context);
                 ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text('Tarjeta eliminada'),
-                    backgroundColor: Colors.green,
+                  SnackBar(
+                    content: const Text('Tarjeta eliminada'),
+                    backgroundColor: Colors.red[700],
                   ),
                 );
               },
               style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.red,
+                backgroundColor: Colors.red[700],
+                foregroundColor: Colors.white,
               ),
               child: const Text('Eliminar'),
             ),
@@ -482,6 +522,7 @@ class _CarteraPageState extends State<CarteraPage> {
     return DefaultTabController(
       length: 2,
       child: Scaffold(
+        backgroundColor: kColorBackground, // CAMBIO: Fondo hueso
         appBar: AppBar(
           title: const Text(
             'Mi Cartera',
@@ -490,10 +531,14 @@ class _CarteraPageState extends State<CarteraPage> {
               color: Colors.white,
             ),
           ),
-          backgroundColor: Colors.blue[700],
+          backgroundColor: kColorPrimary, // CAMBIO: Café oscuro
           foregroundColor: Colors.white,
           elevation: 0,
+          // Color del indicador de la pestaña (la línea debajo)
           bottom: const TabBar(
+            indicatorColor: kColorAccent, // CAMBIO: Indicador dorado
+            labelColor: kColorAccent, // Icono seleccionado dorado
+            unselectedLabelColor: Colors.white70, // No seleccionado blanco suave
             tabs: [
               Tab(text: 'Saldo', icon: Icon(Icons.account_balance_wallet)),
               Tab(text: 'Tarjetas', icon: Icon(Icons.credit_card)),
@@ -526,12 +571,13 @@ class _CarteraPageState extends State<CarteraPage> {
               width: double.infinity,
               padding: const EdgeInsets.all(24),
               decoration: BoxDecoration(
-                gradient: LinearGradient(
+                // CAMBIO: Gradiente de cafés para simular el "Café"
+                gradient: const LinearGradient(
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
                   colors: [
-                    Colors.blue[600]!,
-                    Colors.blue[800]!,
+                    kColorSecondary, // Café medio
+                    kColorPrimary,   // Café oscuro
                   ],
                 ),
                 borderRadius: BorderRadius.circular(16),
@@ -552,15 +598,15 @@ class _CarteraPageState extends State<CarteraPage> {
                     style: const TextStyle(
                       fontSize: 36,
                       fontWeight: FontWeight.bold,
-                      color: Colors.white,
+                      color: Colors.white, // Color Accent
                     ),
                   ),
                   const SizedBox(height: 16),
                   ElevatedButton(
                     onPressed: _mostrarDialogoRecarga,
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.white,
-                      foregroundColor: Colors.blue[700],
+                      backgroundColor: kColorAccent, // CAMBIO: Botón dorado
+                      foregroundColor: kColorPrimary, // Texto café
                       padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 12),
                     ),
                     child: const Row(
@@ -588,13 +634,14 @@ class _CarteraPageState extends State<CarteraPage> {
             style: TextStyle(
               fontSize: 20,
               fontWeight: FontWeight.bold,
-              color: Colors.blue,
+              color: kColorText, // CAMBIO: Café
             ),
           ),
           const SizedBox(height: 16),
 
           if (_recargas.isEmpty)
             const Card(
+              color: Colors.white,
               child: Padding(
                 padding: EdgeInsets.all(20),
                 child: Column(
@@ -612,29 +659,32 @@ class _CarteraPageState extends State<CarteraPage> {
           else
             ..._recargas.map((recarga) {
               return Card(
+                color: Colors.white,
+                elevation: 1,
                 margin: const EdgeInsets.only(bottom: 8),
                 child: ListTile(
-                  leading: const Icon(Icons.add_circle, color: Colors.green),
+                  leading: Icon(Icons.add_circle, color: Colors.green[700]),
                   title: Text(
                     '+\$${recarga['monto']}',
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontWeight: FontWeight.bold,
-                      color: Colors.green,
+                      color: Colors.green[700],
                     ),
                   ),
                   subtitle: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(recarga['metodo']),
-                      Text('${recarga['fecha']} ${recarga['hora']}'),
+                      Text(recarga['metodo'], style: TextStyle(color: Colors.grey[800])),
+                      Text('${recarga['fecha']} ${recarga['hora']}', style: TextStyle(color: Colors.grey[600], fontSize: 12)),
                     ],
                   ),
                   trailing: Chip(
                     label: Text(
                       recarga['estado'],
-                      style: const TextStyle(fontSize: 12, color: Colors.white),
+                      style: const TextStyle(fontSize: 10, color: Colors.white),
                     ),
-                    backgroundColor: Colors.green,
+                    padding: const EdgeInsets.all(0),
+                    backgroundColor: Colors.green[700],
                   ),
                 ),
               );
@@ -652,14 +702,16 @@ class _CarteraPageState extends State<CarteraPage> {
         children: [
           // Botón para agregar tarjeta
           Card(
+            color: Colors.white,
+            elevation: 2,
             child: ListTile(
-              leading: const Icon(Icons.add_circle, color: Colors.blue),
+              leading: const Icon(Icons.add_circle, color: kColorPrimary), // CAMBIO
               title: const Text(
                 'Agregar Nueva Tarjeta',
-                style: TextStyle(fontWeight: FontWeight.bold),
+                style: TextStyle(fontWeight: FontWeight.bold, color: kColorText),
               ),
               subtitle: const Text('Visa, MasterCard, American Express'),
-              trailing: const Icon(Icons.arrow_forward_ios),
+              trailing: const Icon(Icons.arrow_forward_ios, size: 16),
               onTap: _mostrarDialogoAgregarTarjeta,
             ),
           ),
@@ -672,13 +724,14 @@ class _CarteraPageState extends State<CarteraPage> {
             style: TextStyle(
               fontSize: 20,
               fontWeight: FontWeight.bold,
-              color: Colors.blue,
+              color: kColorText, // CAMBIO
             ),
           ),
           const SizedBox(height: 16),
 
           if (_tarjetas.isEmpty)
             const Card(
+              color: Colors.white,
               child: Padding(
                 padding: EdgeInsets.all(20),
                 child: Column(
@@ -698,37 +751,38 @@ class _CarteraPageState extends State<CarteraPage> {
               final index = entry.key;
               final tarjeta = entry.value;
               return Card(
+                color: Colors.white,
                 margin: const EdgeInsets.only(bottom: 12),
                 child: ListTile(
                   leading: Icon(
                     Icons.credit_card,
-                    color: tarjeta['color'],
+                    color: tarjeta['color'], // Mantenemos el color de la marca (rojo/azul)
                     size: 32,
                   ),
                   title: Text(
                     '${tarjeta['tipo']} ${tarjeta['numero']}',
-                    style: const TextStyle(fontWeight: FontWeight.bold),
+                    style: const TextStyle(fontWeight: FontWeight.bold, color: kColorText),
                   ),
                   subtitle: Text('Vence: ${tarjeta['vencimiento']}'),
                   trailing: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       if (tarjeta['principal'])
-                        Chip(
-                          label: const Text(
+                        const Chip(
+                          label: Text(
                             'Principal',
-                            style: TextStyle(fontSize: 10, color: Colors.white),
+                            style: TextStyle(fontSize: 10, color: kColorPrimary),
                           ),
-                          backgroundColor: Colors.blue,
+                          backgroundColor: kColorAccent, // CAMBIO: Dorado
                         )
                       else
                         IconButton(
-                          icon: const Icon(Icons.star_border, color: Colors.blue),
+                          icon: const Icon(Icons.star_border, color: kColorAccent), // Estrella dorada
                           onPressed: () => _establecerComoPrincipal(index),
                           tooltip: 'Establecer como principal',
                         ),
                       IconButton(
-                        icon: const Icon(Icons.delete, color: Colors.red),
+                        icon: const Icon(Icons.delete, color: Colors.grey),
                         onPressed: () => _eliminarTarjeta(index),
                         tooltip: 'Eliminar tarjeta',
                       ),
